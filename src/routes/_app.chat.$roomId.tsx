@@ -32,6 +32,16 @@ function RoomView() {
   const [profilesById, setProfilesById] = useState<Record<string, Pick<Profile, "id" | "full_name" | "photo_url">>>({});
   const [replyTo, setReplyTo] = useState<ChatMessage | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const profilesRef = useRef(profilesById);
+  const subroomsLenRef = useRef(subrooms.length);
+  const activeSubRef = useRef(activeSub);
+  useEffect(() => {
+    profilesRef.current = profilesById;
+  }, [profilesById]);
+  useEffect(() => {
+    subroomsLenRef.current = subrooms.length;
+    activeSubRef.current = activeSub;
+  }, [subrooms.length, activeSub]);
 
   // Load room + subrooms
   useEffect(() => {
@@ -82,11 +92,11 @@ function RoomView() {
     })();
   }, [room, roomId, activeSub, subrooms.length]);
 
-  // Realtime updates
+  // Realtime updates — subscribe once per room/user; read latest sub-room/profile state via refs
   useEffect(() => {
     if (!room || !user) return;
     const ch = supabase
-      .channel(`room-${roomId}-${activeSub ?? "all"}`)
+      .channel(`room-${roomId}`)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "chat_messages", filter: `room_id=eq.${roomId}` },
@@ -94,10 +104,10 @@ function RoomView() {
           const newMsg = payload.new as ChatMessage | undefined;
           const oldMsg = payload.old as ChatMessage | undefined;
           const matchesSub = (m?: ChatMessage) =>
-            !m || subrooms.length === 0 || m.subroom_id === activeSub;
+            !m || subroomsLenRef.current === 0 || m.subroom_id === activeSubRef.current;
           if (payload.eventType === "INSERT" && newMsg && matchesSub(newMsg)) {
             setMessages((prev) => [...prev, newMsg]);
-            if (!profilesById[newMsg.sender_id]) {
+            if (!profilesRef.current[newMsg.sender_id]) {
               const { data: p } = await supabase
                 .from("profiles")
                 .select("id, full_name, photo_url")
@@ -125,7 +135,7 @@ function RoomView() {
     return () => {
       supabase.removeChannel(ch);
     };
-  }, [room, roomId, activeSub, subrooms.length, user, profilesById]);
+  }, [room, roomId, user]);
 
   // Auto-scroll + mark read
   useEffect(() => {
