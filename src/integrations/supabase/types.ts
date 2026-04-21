@@ -14,6 +14,187 @@ export type Database = {
   }
   public: {
     Tables: {
+      lecture_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          lecture_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          lecture_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          lecture_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lecture_comments_lecture_id_fkey"
+            columns: ["lecture_id"]
+            isOneToOne: false
+            referencedRelation: "lectures"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lecture_comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lecture_likes: {
+        Row: {
+          created_at: string
+          id: string
+          lecture_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lecture_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lecture_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lecture_likes_lecture_id_fkey"
+            columns: ["lecture_id"]
+            isOneToOne: false
+            referencedRelation: "lectures"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lecture_resources: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          lecture_id: string
+          reviewed_by: string | null
+          status: string
+          suggested_by: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          lecture_id: string
+          reviewed_by?: string | null
+          status?: string
+          suggested_by: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          lecture_id?: string
+          reviewed_by?: string | null
+          status?: string
+          suggested_by?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lecture_resources_lecture_id_fkey"
+            columns: ["lecture_id"]
+            isOneToOne: false
+            referencedRelation: "lectures"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lecture_resources_suggested_by_fkey"
+            columns: ["suggested_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lectures: {
+        Row: {
+          branch: Database["public"]["Enums"]["student_branch"]
+          created_at: string
+          description: string | null
+          id: string
+          like_count: number
+          subject: string
+          tags: string[]
+          teacher_id: string
+          title: string
+          updated_at: string
+          video_id: string | null
+          video_provider: string
+          video_url: string
+          view_count: number
+          year: Database["public"]["Enums"]["student_year"]
+        }
+        Insert: {
+          branch: Database["public"]["Enums"]["student_branch"]
+          created_at?: string
+          description?: string | null
+          id?: string
+          like_count?: number
+          subject: string
+          tags?: string[]
+          teacher_id: string
+          title: string
+          updated_at?: string
+          video_id?: string | null
+          video_provider?: string
+          video_url: string
+          view_count?: number
+          year: Database["public"]["Enums"]["student_year"]
+        }
+        Update: {
+          branch?: Database["public"]["Enums"]["student_branch"]
+          created_at?: string
+          description?: string | null
+          id?: string
+          like_count?: number
+          subject?: string
+          tags?: string[]
+          teacher_id?: string
+          title?: string
+          updated_at?: string
+          video_id?: string | null
+          video_provider?: string
+          video_url?: string
+          view_count?: number
+          year?: Database["public"]["Enums"]["student_year"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lectures_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       note_bookmarks: {
         Row: {
           created_at: string
@@ -253,6 +434,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      increment_lecture_view: {
+        Args: { _lecture_id: string }
+        Returns: undefined
       }
     }
     Enums: {
