@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
@@ -27,6 +27,7 @@ import {
   X,
   Plus,
   Upload,
+  Bookmark,
 } from "lucide-react";
 
 type Profile = {
@@ -58,6 +59,9 @@ function ProfilePage() {
   const [skillInput, setSkillInput] = useState("");
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [library, setLibrary] = useState<
+    { id: string; title: string; subject: string }[]
+  >([]);
 
   async function load() {
     if (!user) return;
@@ -72,6 +76,17 @@ function ProfilePage() {
       setBio(data.bio ?? "");
       setSkills(data.skills ?? []);
     }
+    const { data: bm } = await supabase
+      .from("note_bookmarks")
+      .select("note_id, notes(id, title, subject)")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(20);
+    setLibrary(
+      (bm ?? [])
+        .map((row: { notes: { id: string; title: string; subject: string } | null }) => row.notes)
+        .filter((n): n is { id: string; title: string; subject: string } => !!n),
+    );
     setLoading(false);
   }
 
