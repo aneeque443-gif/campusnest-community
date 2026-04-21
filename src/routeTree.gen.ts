@@ -17,7 +17,6 @@ import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppNotesRouteImport } from './routes/_app.notes'
 import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppGigsRouteImport } from './routes/_app.gigs'
-import { Route as AppChatRouteImport } from './routes/_app.chat'
 import { Route as AppChatIndexRouteImport } from './routes/_app.chat.index'
 import { Route as AppNotesNoteIdRouteImport } from './routes/_app.notes.$noteId'
 import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures.$lectureId'
@@ -62,15 +61,10 @@ const AppGigsRoute = AppGigsRouteImport.update({
   path: '/gigs',
   getParentRoute: () => AppRoute,
 } as any)
-const AppChatRoute = AppChatRouteImport.update({
-  id: '/chat',
-  path: '/chat',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppChatIndexRoute = AppChatIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppChatRoute,
+  id: '/chat/',
+  path: '/chat/',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppNotesNoteIdRoute = AppNotesNoteIdRouteImport.update({
   id: '/$noteId',
@@ -83,16 +77,15 @@ const AppLecturesLectureIdRoute = AppLecturesLectureIdRouteImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 const AppChatRoomIdRoute = AppChatRoomIdRouteImport.update({
-  id: '/$roomId',
-  path: '/$roomId',
-  getParentRoute: () => AppChatRoute,
+  id: '/chat/$roomId',
+  path: '/chat/$roomId',
+  getParentRoute: () => AppRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/chat': typeof AppChatRouteWithChildren
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
@@ -121,7 +114,6 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/_app/chat': typeof AppChatRouteWithChildren
   '/_app/gigs': typeof AppGigsRoute
   '/_app/home': typeof AppHomeRoute
   '/_app/notes': typeof AppNotesRouteWithChildren
@@ -137,7 +129,6 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/signup'
-    | '/chat'
     | '/gigs'
     | '/home'
     | '/notes'
@@ -165,7 +156,6 @@ export interface FileRouteTypes {
     | '/_app'
     | '/login'
     | '/signup'
-    | '/_app/chat'
     | '/_app/gigs'
     | '/_app/home'
     | '/_app/notes'
@@ -241,19 +231,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppGigsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/chat': {
-      id: '/_app/chat'
-      path: '/chat'
-      fullPath: '/chat'
-      preLoaderRoute: typeof AppChatRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/chat/': {
       id: '/_app/chat/'
-      path: '/'
+      path: '/chat'
       fullPath: '/chat/'
       preLoaderRoute: typeof AppChatIndexRouteImport
-      parentRoute: typeof AppChatRoute
+      parentRoute: typeof AppRoute
     }
     '/_app/notes/$noteId': {
       id: '/_app/notes/$noteId'
@@ -271,26 +254,13 @@ declare module '@tanstack/react-router' {
     }
     '/_app/chat/$roomId': {
       id: '/_app/chat/$roomId'
-      path: '/$roomId'
+      path: '/chat/$roomId'
       fullPath: '/chat/$roomId'
       preLoaderRoute: typeof AppChatRoomIdRouteImport
-      parentRoute: typeof AppChatRoute
+      parentRoute: typeof AppRoute
     }
   }
 }
-
-interface AppChatRouteChildren {
-  AppChatRoomIdRoute: typeof AppChatRoomIdRoute
-  AppChatIndexRoute: typeof AppChatIndexRoute
-}
-
-const AppChatRouteChildren: AppChatRouteChildren = {
-  AppChatRoomIdRoute: AppChatRoomIdRoute,
-  AppChatIndexRoute: AppChatIndexRoute,
-}
-
-const AppChatRouteWithChildren =
-  AppChatRoute._addFileChildren(AppChatRouteChildren)
 
 interface AppNotesRouteChildren {
   AppNotesNoteIdRoute: typeof AppNotesNoteIdRoute
@@ -305,21 +275,23 @@ const AppNotesRouteWithChildren = AppNotesRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
-  AppChatRoute: typeof AppChatRouteWithChildren
   AppGigsRoute: typeof AppGigsRoute
   AppHomeRoute: typeof AppHomeRoute
   AppNotesRoute: typeof AppNotesRouteWithChildren
   AppProfileRoute: typeof AppProfileRoute
+  AppChatRoomIdRoute: typeof AppChatRoomIdRoute
   AppLecturesLectureIdRoute: typeof AppLecturesLectureIdRoute
+  AppChatIndexRoute: typeof AppChatIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppChatRoute: AppChatRouteWithChildren,
   AppGigsRoute: AppGigsRoute,
   AppHomeRoute: AppHomeRoute,
   AppNotesRoute: AppNotesRouteWithChildren,
   AppProfileRoute: AppProfileRoute,
+  AppChatRoomIdRoute: AppChatRoomIdRoute,
   AppLecturesLectureIdRoute: AppLecturesLectureIdRoute,
+  AppChatIndexRoute: AppChatIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -333,3 +305,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
