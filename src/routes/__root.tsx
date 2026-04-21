@@ -31,7 +31,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
+      { title: "CampusNest" },
       { name: "description", content: "CampusNest — your college companion" },
       { name: "author", content: "CampusNest" },
       { property: "og:title", content: "CampusNest" },
