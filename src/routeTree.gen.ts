@@ -19,6 +19,7 @@ import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppGigsRouteImport } from './routes/_app.gigs'
 import { Route as AppChatRouteImport } from './routes/_app.chat'
 import { Route as AppNotesNoteIdRouteImport } from './routes/_app.notes.$noteId'
+import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures.$lectureId'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -69,6 +70,11 @@ const AppNotesNoteIdRoute = AppNotesNoteIdRouteImport.update({
   path: '/$noteId',
   getParentRoute: () => AppNotesRoute,
 } as any)
+const AppLecturesLectureIdRoute = AppLecturesLectureIdRouteImport.update({
+  id: '/lectures/$lectureId',
+  path: '/lectures/$lectureId',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
   '/profile': typeof AppProfileRoute
+  '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
 }
 export interface FileRoutesByTo {
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
   '/profile': typeof AppProfileRoute
+  '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
 }
 export interface FileRoutesById {
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/_app/home': typeof AppHomeRoute
   '/_app/notes': typeof AppNotesRouteWithChildren
   '/_app/profile': typeof AppProfileRoute
+  '/_app/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/_app/notes/$noteId': typeof AppNotesNoteIdRoute
 }
 export interface FileRouteTypes {
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/notes'
     | '/profile'
+    | '/lectures/$lectureId'
     | '/notes/$noteId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/notes'
     | '/profile'
+    | '/lectures/$lectureId'
     | '/notes/$noteId'
   id:
     | '__root__'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/_app/home'
     | '/_app/notes'
     | '/_app/profile'
+    | '/_app/lectures/$lectureId'
     | '/_app/notes/$noteId'
   fileRoutesById: FileRoutesById
 }
@@ -221,6 +233,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppNotesNoteIdRouteImport
       parentRoute: typeof AppNotesRoute
     }
+    '/_app/lectures/$lectureId': {
+      id: '/_app/lectures/$lectureId'
+      path: '/lectures/$lectureId'
+      fullPath: '/lectures/$lectureId'
+      preLoaderRoute: typeof AppLecturesLectureIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -242,6 +261,7 @@ interface AppRouteChildren {
   AppHomeRoute: typeof AppHomeRoute
   AppNotesRoute: typeof AppNotesRouteWithChildren
   AppProfileRoute: typeof AppProfileRoute
+  AppLecturesLectureIdRoute: typeof AppLecturesLectureIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -250,6 +270,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppHomeRoute: AppHomeRoute,
   AppNotesRoute: AppNotesRouteWithChildren,
   AppProfileRoute: AppProfileRoute,
+  AppLecturesLectureIdRoute: AppLecturesLectureIdRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
