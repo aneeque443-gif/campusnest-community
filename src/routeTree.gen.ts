@@ -14,7 +14,6 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
-import { Route as AppNotesRouteImport } from './routes/_app.notes'
 import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppGigsRouteImport } from './routes/_app.gigs'
 import { Route as AppChatRouteImport } from './routes/_app.chat'
@@ -43,11 +42,6 @@ const AppProfileRoute = AppProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AppRoute,
 } as any)
-const AppNotesRoute = AppNotesRouteImport.update({
-  id: '/notes',
-  path: '/notes',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppHomeRoute = AppHomeRouteImport.update({
   id: '/home',
   path: '/home',
@@ -71,7 +65,6 @@ export interface FileRoutesByFullPath {
   '/chat': typeof AppChatRoute
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
-  '/notes': typeof AppNotesRoute
   '/profile': typeof AppProfileRoute
 }
 export interface FileRoutesByTo {
@@ -81,7 +74,6 @@ export interface FileRoutesByTo {
   '/chat': typeof AppChatRoute
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
-  '/notes': typeof AppNotesRoute
   '/profile': typeof AppProfileRoute
 }
 export interface FileRoutesById {
@@ -93,7 +85,6 @@ export interface FileRoutesById {
   '/_app/chat': typeof AppChatRoute
   '/_app/gigs': typeof AppGigsRoute
   '/_app/home': typeof AppHomeRoute
-  '/_app/notes': typeof AppNotesRoute
   '/_app/profile': typeof AppProfileRoute
 }
 export interface FileRouteTypes {
@@ -105,18 +96,9 @@ export interface FileRouteTypes {
     | '/chat'
     | '/gigs'
     | '/home'
-    | '/notes'
     | '/profile'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/login'
-    | '/signup'
-    | '/chat'
-    | '/gigs'
-    | '/home'
-    | '/notes'
-    | '/profile'
+  to: '/' | '/login' | '/signup' | '/chat' | '/gigs' | '/home' | '/profile'
   id:
     | '__root__'
     | '/'
@@ -126,7 +108,6 @@ export interface FileRouteTypes {
     | '/_app/chat'
     | '/_app/gigs'
     | '/_app/home'
-    | '/_app/notes'
     | '/_app/profile'
   fileRoutesById: FileRoutesById
 }
@@ -174,13 +155,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProfileRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/notes': {
-      id: '/_app/notes'
-      path: '/notes'
-      fullPath: '/notes'
-      preLoaderRoute: typeof AppNotesRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/home': {
       id: '/_app/home'
       path: '/home'
@@ -209,7 +183,6 @@ interface AppRouteChildren {
   AppChatRoute: typeof AppChatRoute
   AppGigsRoute: typeof AppGigsRoute
   AppHomeRoute: typeof AppHomeRoute
-  AppNotesRoute: typeof AppNotesRoute
   AppProfileRoute: typeof AppProfileRoute
 }
 
@@ -217,7 +190,6 @@ const AppRouteChildren: AppRouteChildren = {
   AppChatRoute: AppChatRoute,
   AppGigsRoute: AppGigsRoute,
   AppHomeRoute: AppHomeRoute,
-  AppNotesRoute: AppNotesRoute,
   AppProfileRoute: AppProfileRoute,
 }
 
