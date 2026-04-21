@@ -103,26 +103,15 @@ export function useUserRooms(userId: string | undefined) {
     refresh();
   }, [refresh]);
 
-  // Keep latest refresh in a ref so the realtime channel doesn't get torn down
-  // and recreated whenever refresh's identity changes (which would cause
-  // ".on() after subscribe()" errors when re-attaching listeners).
+  // Poll every 3 seconds for new rooms / unread counts / previews.
   const refreshRef = useRef(refresh);
   useEffect(() => {
     refreshRef.current = refresh;
   }, [refresh]);
-
   useEffect(() => {
     if (!userId) return;
-    const handler = () => refreshRef.current();
-    const ch = supabase
-      .channel(`user-rooms-${userId}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "chat_messages" }, handler)
-      .on("postgres_changes", { event: "*", schema: "public", table: "chat_room_members" }, handler)
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_rooms" }, handler)
-      .subscribe();
-    return () => {
-      supabase.removeChannel(ch);
-    };
+    const id = setInterval(() => refreshRef.current(), 3000);
+    return () => clearInterval(id);
   }, [userId]);
 
   return { rooms, loading, refresh };

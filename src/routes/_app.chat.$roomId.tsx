@@ -33,15 +33,9 @@ function RoomView() {
   const [replyTo, setReplyTo] = useState<ChatMessage | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const profilesRef = useRef(profilesById);
-  const subroomsLenRef = useRef(subrooms.length);
-  const activeSubRef = useRef(activeSub);
   useEffect(() => {
     profilesRef.current = profilesById;
   }, [profilesById]);
-  useEffect(() => {
-    subroomsLenRef.current = subrooms.length;
-    activeSubRef.current = activeSub;
-  }, [subrooms.length, activeSub]);
 
   // Load room + subrooms
   useEffect(() => {
@@ -61,81 +55,49 @@ function RoomView() {
     })();
   }, [roomId, navigate]);
 
-  // Load messages + reactions for current sub-room
+  // Fetch messages + reactions + sender profiles for the active sub-room.
+  async function fetchMessages(roomId: string, subFilter: string | null) {
+    let q = supabase
+      .from("chat_messages")
+      .select("*")
+      .eq("room_id", roomId)
+      .order("created_at", { ascending: true });
+    if (subFilter) q = q.eq("subroom_id", subFilter);
+    const { data: msgs } = await q;
+    const list = msgs ?? [];
+    setMessages(list);
+    if (list.length) {
+      const ids = list.map((m) => m.id);
+      const senderIds = Array.from(new Set(list.map((m) => m.sender_id)));
+      const missing = senderIds.filter((id) => !profilesRef.current[id]);
+      const [{ data: rx }, profsRes] = await Promise.all([
+        supabase.from("chat_message_reactions").select("*").in("message_id", ids),
+        missing.length
+          ? supabase.from("profiles").select("id, full_name, photo_url").in("id", missing)
+          : Promise.resolve({ data: [] as Pick<Profile, "id" | "full_name" | "photo_url">[] }),
+      ]);
+      setReactions(rx ?? []);
+      if (profsRes.data && profsRes.data.length) {
+        setProfilesById((prev) => {
+          const next = { ...prev };
+          profsRes.data!.forEach((p) => (next[p.id] = p));
+          return next;
+        });
+      }
+    } else {
+      setReactions([]);
+    }
+  }
+
+  // Initial load + poll every 3 seconds for new messages and reactions.
   useEffect(() => {
     if (!room) return;
     const subFilter = subrooms.length > 0 ? activeSub : null;
-    (async () => {
-      let q = supabase
-        .from("chat_messages")
-        .select("*")
-        .eq("room_id", roomId)
-        .order("created_at", { ascending: true });
-      if (subFilter) q = q.eq("subroom_id", subFilter);
-      const { data: msgs } = await q;
-      setMessages(msgs ?? []);
-
-      if (msgs && msgs.length) {
-        const ids = msgs.map((m) => m.id);
-        const senderIds = Array.from(new Set(msgs.map((m) => m.sender_id)));
-        const [{ data: rx }, { data: profs }] = await Promise.all([
-          supabase.from("chat_message_reactions").select("*").in("message_id", ids),
-          supabase.from("profiles").select("id, full_name, photo_url").in("id", senderIds),
-        ]);
-        setReactions(rx ?? []);
-        const map: Record<string, Pick<Profile, "id" | "full_name" | "photo_url">> = {};
-        profs?.forEach((p) => (map[p.id] = p));
-        setProfilesById(map);
-      } else {
-        setReactions([]);
-      }
-    })();
+    fetchMessages(roomId, subFilter);
+    const id = setInterval(() => fetchMessages(roomId, subFilter), 3000);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [room, roomId, activeSub, subrooms.length]);
-
-  // Realtime updates — subscribe once per room/user; read latest sub-room/profile state via refs
-  useEffect(() => {
-    if (!room || !user) return;
-    const ch = supabase
-      .channel(`room-${roomId}`)
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "chat_messages", filter: `room_id=eq.${roomId}` },
-        async (payload) => {
-          const newMsg = payload.new as ChatMessage | undefined;
-          const oldMsg = payload.old as ChatMessage | undefined;
-          const matchesSub = (m?: ChatMessage) =>
-            !m || subroomsLenRef.current === 0 || m.subroom_id === activeSubRef.current;
-          if (payload.eventType === "INSERT" && newMsg && matchesSub(newMsg)) {
-            setMessages((prev) => [...prev, newMsg]);
-            if (!profilesRef.current[newMsg.sender_id]) {
-              const { data: p } = await supabase
-                .from("profiles")
-                .select("id, full_name, photo_url")
-                .eq("id", newMsg.sender_id)
-                .maybeSingle();
-              if (p) setProfilesById((x) => ({ ...x, [p.id]: p }));
-            }
-          } else if (payload.eventType === "UPDATE" && newMsg) {
-            setMessages((prev) => prev.map((m) => (m.id === newMsg.id ? newMsg : m)));
-          } else if (payload.eventType === "DELETE" && oldMsg) {
-            setMessages((prev) => prev.filter((m) => m.id !== oldMsg.id));
-          }
-        },
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "chat_message_reactions" },
-        (payload) => {
-          if (payload.eventType === "INSERT") setReactions((x) => [...x, payload.new as Reaction]);
-          else if (payload.eventType === "DELETE")
-            setReactions((x) => x.filter((r) => r.id !== (payload.old as Reaction).id));
-        },
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(ch);
-    };
-  }, [room, roomId, user]);
 
   // Auto-scroll + mark read
   useEffect(() => {
