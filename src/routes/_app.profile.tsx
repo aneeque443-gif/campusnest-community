@@ -313,6 +313,39 @@ function ProfilePage() {
         </CardContent>
       </Card>
 
+      {/* My Library */}
+      <Card className="shadow-[var(--shadow-card)]">
+        <CardHeader className="pb-2">
+          <h2 className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
+            <Bookmark className="h-4 w-4 text-accent" /> My Library
+          </h2>
+        </CardHeader>
+        <CardContent>
+          {library.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Bookmark notes to save them here.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {library.map((n) => (
+                <li key={n.id}>
+                  <Link
+                    to="/notes/$noteId"
+                    params={{ noteId: n.id }}
+                    className="flex items-center justify-between gap-2 rounded-md bg-muted px-3 py-2 hover:bg-secondary"
+                  >
+                    <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
+                      {n.title}
+                    </span>
+                    <span className="shrink-0 text-xs text-muted-foreground">{n.subject}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
+
       <p className="text-center text-xs text-muted-foreground">
         Enrollment ID: <span className="font-mono">{profile.enrollment_id}</span>
       </p>
