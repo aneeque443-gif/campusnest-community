@@ -33,6 +33,8 @@ import {
   ShieldCheck,
   X,
 } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { LecturesView } from "@/components/LecturesView";
 
 const YEARS = ["FYIT", "SYIT", "TYIT"] as const;
 const BRANCHES = ["IT", "CS", "EXTC", "Mechanical"] as const;
@@ -72,6 +74,7 @@ function NotesPage() {
   const [upvotedIds, setUpvotedIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [tab, setTab] = useState<"notes" | "lectures">("notes");
 
   // Bootstrap: read profile defaults
   useEffect(() => {
@@ -191,11 +194,14 @@ function NotesPage() {
     <div className="space-y-4 px-4 py-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-primary">NestNotes</h1>
+          <h1 className="text-2xl font-bold text-primary">
+            {tab === "notes" ? "NestNotes" : "LecVault"}
+          </h1>
           <p className="text-xs text-muted-foreground">
             {showingMine ? "Showing notes for your year & branch" : "Filtered view"}
           </p>
         </div>
+        {tab === "notes" && (
         <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
           <DialogTrigger asChild>
             <Button size="sm" className="gap-1">
@@ -212,21 +218,28 @@ function NotesPage() {
             defaultBranch={profileBranch}
           />
         </Dialog>
+        )}
       </div>
 
-      {/* Search */}
-      <div className="relative">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search by title or subject"
-          className="pl-9"
-        />
-      </div>
+      <Tabs value={tab} onValueChange={(v) => setTab(v as "notes" | "lectures")}>
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="notes">Notes</TabsTrigger>
+          <TabsTrigger value="lectures">Lectures</TabsTrigger>
+        </TabsList>
 
-      {/* Filters */}
-      <div className="grid grid-cols-3 gap-2">
+        <TabsContent value="notes" className="mt-4 space-y-4">
+          {/* Search */}
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by title or subject"
+              className="pl-9"
+            />
+          </div>
+          {/* Filters */}
+          <div className="grid grid-cols-3 gap-2">
         <Select value={yearFilter || "all"} onValueChange={(v) => setYearFilter(v === "all" ? "" : v)}>
           <SelectTrigger><SelectValue placeholder="Year" /></SelectTrigger>
           <SelectContent>
@@ -246,10 +259,9 @@ function NotesPage() {
           onChange={(e) => setSubjectFilter(e.target.value)}
           placeholder="Subject"
         />
-      </div>
-
-      {/* List */}
-      {loading ? (
+          </div>
+          {/* List */}
+          {loading ? (
         <div className="flex justify-center py-10">
           <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
         </div>
@@ -272,7 +284,13 @@ function NotesPage() {
             />
           ))}
         </div>
-      )}
+          )}
+        </TabsContent>
+
+        <TabsContent value="lectures" className="mt-4">
+          <LecturesView defaultYear={profileYear} defaultBranch={profileBranch} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
