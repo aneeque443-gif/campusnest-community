@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
@@ -27,6 +27,7 @@ import {
   X,
   Plus,
   Upload,
+  Bookmark,
 } from "lucide-react";
 
 type Profile = {
@@ -58,6 +59,9 @@ function ProfilePage() {
   const [skillInput, setSkillInput] = useState("");
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [library, setLibrary] = useState<
+    { id: string; title: string; subject: string }[]
+  >([]);
 
   async function load() {
     if (!user) return;
@@ -72,6 +76,17 @@ function ProfilePage() {
       setBio(data.bio ?? "");
       setSkills(data.skills ?? []);
     }
+    const { data: bm } = await supabase
+      .from("note_bookmarks")
+      .select("note_id, notes(id, title, subject)")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(20);
+    setLibrary(
+      (bm ?? [])
+        .map((row: { notes: { id: string; title: string; subject: string } | null }) => row.notes)
+        .filter((n): n is { id: string; title: string; subject: string } => !!n),
+    );
     setLoading(false);
   }
 
@@ -295,6 +310,39 @@ function ProfilePage() {
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground">No achievements yet — start earning!</p>
+        </CardContent>
+      </Card>
+
+      {/* My Library */}
+      <Card className="shadow-[var(--shadow-card)]">
+        <CardHeader className="pb-2">
+          <h2 className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
+            <Bookmark className="h-4 w-4 text-accent" /> My Library
+          </h2>
+        </CardHeader>
+        <CardContent>
+          {library.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Bookmark notes to save them here.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {library.map((n) => (
+                <li key={n.id}>
+                  <Link
+                    to="/notes/$noteId"
+                    params={{ noteId: n.id }}
+                    className="flex items-center justify-between gap-2 rounded-md bg-muted px-3 py-2 hover:bg-secondary"
+                  >
+                    <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
+                      {n.title}
+                    </span>
+                    <span className="shrink-0 text-xs text-muted-foreground">{n.subject}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </CardContent>
       </Card>
 

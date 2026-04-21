@@ -14,6 +14,165 @@ export type Database = {
   }
   public: {
     Tables: {
+      note_bookmarks: {
+        Row: {
+          created_at: string
+          id: string
+          note_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "note_bookmarks_note_id_fkey"
+            columns: ["note_id"]
+            isOneToOne: false
+            referencedRelation: "notes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      note_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          note_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          note_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          note_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "note_comments_note_id_fkey"
+            columns: ["note_id"]
+            isOneToOne: false
+            referencedRelation: "notes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "note_comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      note_upvotes: {
+        Row: {
+          created_at: string
+          id: string
+          note_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "note_upvotes_note_id_fkey"
+            columns: ["note_id"]
+            isOneToOne: false
+            referencedRelation: "notes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notes: {
+        Row: {
+          branch: Database["public"]["Enums"]["student_branch"]
+          created_at: string
+          description: string | null
+          file_type: string
+          file_url: string
+          id: string
+          is_official: boolean
+          subject: string
+          tags: string[]
+          title: string
+          updated_at: string
+          uploader_id: string
+          upvote_count: number
+          xp_milestone_awarded: boolean
+          year: Database["public"]["Enums"]["student_year"]
+        }
+        Insert: {
+          branch: Database["public"]["Enums"]["student_branch"]
+          created_at?: string
+          description?: string | null
+          file_type: string
+          file_url: string
+          id?: string
+          is_official?: boolean
+          subject: string
+          tags?: string[]
+          title: string
+          updated_at?: string
+          uploader_id: string
+          upvote_count?: number
+          xp_milestone_awarded?: boolean
+          year: Database["public"]["Enums"]["student_year"]
+        }
+        Update: {
+          branch?: Database["public"]["Enums"]["student_branch"]
+          created_at?: string
+          description?: string | null
+          file_type?: string
+          file_url?: string
+          id?: string
+          is_official?: boolean
+          subject?: string
+          tags?: string[]
+          title?: string
+          updated_at?: string
+          uploader_id?: string
+          upvote_count?: number
+          xp_milestone_awarded?: boolean
+          year?: Database["public"]["Enums"]["student_year"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notes_uploader_id_fkey"
+            columns: ["uploader_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           bio: string | null
