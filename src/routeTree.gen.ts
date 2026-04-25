@@ -13,13 +13,18 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppSeniordeskRouteImport } from './routes/_app.seniordesk'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppNotesRouteImport } from './routes/_app.notes'
 import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppGigsRouteImport } from './routes/_app.gigs'
+import { Route as AppDoubtsRouteImport } from './routes/_app.doubts'
 import { Route as AppChatIndexRouteImport } from './routes/_app.chat.index'
+import { Route as AppSeniordeskAdminRouteImport } from './routes/_app.seniordesk.admin'
+import { Route as AppSeniordeskQuestionIdRouteImport } from './routes/_app.seniordesk.$questionId'
 import { Route as AppNotesNoteIdRouteImport } from './routes/_app.notes.$noteId'
 import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures.$lectureId'
+import { Route as AppDoubtsDoubtIdRouteImport } from './routes/_app.doubts.$doubtId'
 import { Route as AppChatRoomIdRouteImport } from './routes/_app.chat.$roomId'
 
 const SignupRoute = SignupRouteImport.update({
@@ -41,6 +46,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppSeniordeskRoute = AppSeniordeskRouteImport.update({
+  id: '/seniordesk',
+  path: '/seniordesk',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -61,10 +71,25 @@ const AppGigsRoute = AppGigsRouteImport.update({
   path: '/gigs',
   getParentRoute: () => AppRoute,
 } as any)
+const AppDoubtsRoute = AppDoubtsRouteImport.update({
+  id: '/doubts',
+  path: '/doubts',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppChatIndexRoute = AppChatIndexRouteImport.update({
   id: '/chat/',
   path: '/chat/',
   getParentRoute: () => AppRoute,
+} as any)
+const AppSeniordeskAdminRoute = AppSeniordeskAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AppSeniordeskRoute,
+} as any)
+const AppSeniordeskQuestionIdRoute = AppSeniordeskQuestionIdRouteImport.update({
+  id: '/$questionId',
+  path: '/$questionId',
+  getParentRoute: () => AppSeniordeskRoute,
 } as any)
 const AppNotesNoteIdRoute = AppNotesNoteIdRouteImport.update({
   id: '/$noteId',
@@ -76,6 +101,11 @@ const AppLecturesLectureIdRoute = AppLecturesLectureIdRouteImport.update({
   path: '/lectures/$lectureId',
   getParentRoute: () => AppRoute,
 } as any)
+const AppDoubtsDoubtIdRoute = AppDoubtsDoubtIdRouteImport.update({
+  id: '/$doubtId',
+  path: '/$doubtId',
+  getParentRoute: () => AppDoubtsRoute,
+} as any)
 const AppChatRoomIdRoute = AppChatRoomIdRouteImport.update({
   id: '/chat/$roomId',
   path: '/chat/$roomId',
@@ -86,26 +116,36 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/doubts': typeof AppDoubtsRouteWithChildren
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
   '/profile': typeof AppProfileRoute
+  '/seniordesk': typeof AppSeniordeskRouteWithChildren
   '/chat/$roomId': typeof AppChatRoomIdRoute
+  '/doubts/$doubtId': typeof AppDoubtsDoubtIdRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
+  '/seniordesk/$questionId': typeof AppSeniordeskQuestionIdRoute
+  '/seniordesk/admin': typeof AppSeniordeskAdminRoute
   '/chat/': typeof AppChatIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/doubts': typeof AppDoubtsRouteWithChildren
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
   '/profile': typeof AppProfileRoute
+  '/seniordesk': typeof AppSeniordeskRouteWithChildren
   '/chat/$roomId': typeof AppChatRoomIdRoute
+  '/doubts/$doubtId': typeof AppDoubtsDoubtIdRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
+  '/seniordesk/$questionId': typeof AppSeniordeskQuestionIdRoute
+  '/seniordesk/admin': typeof AppSeniordeskAdminRoute
   '/chat': typeof AppChatIndexRoute
 }
 export interface FileRoutesById {
@@ -114,13 +154,18 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/_app/doubts': typeof AppDoubtsRouteWithChildren
   '/_app/gigs': typeof AppGigsRoute
   '/_app/home': typeof AppHomeRoute
   '/_app/notes': typeof AppNotesRouteWithChildren
   '/_app/profile': typeof AppProfileRoute
+  '/_app/seniordesk': typeof AppSeniordeskRouteWithChildren
   '/_app/chat/$roomId': typeof AppChatRoomIdRoute
+  '/_app/doubts/$doubtId': typeof AppDoubtsDoubtIdRoute
   '/_app/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/_app/notes/$noteId': typeof AppNotesNoteIdRoute
+  '/_app/seniordesk/$questionId': typeof AppSeniordeskQuestionIdRoute
+  '/_app/seniordesk/admin': typeof AppSeniordeskAdminRoute
   '/_app/chat/': typeof AppChatIndexRoute
 }
 export interface FileRouteTypes {
@@ -129,26 +174,36 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/signup'
+    | '/doubts'
     | '/gigs'
     | '/home'
     | '/notes'
     | '/profile'
+    | '/seniordesk'
     | '/chat/$roomId'
+    | '/doubts/$doubtId'
     | '/lectures/$lectureId'
     | '/notes/$noteId'
+    | '/seniordesk/$questionId'
+    | '/seniordesk/admin'
     | '/chat/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
     | '/signup'
+    | '/doubts'
     | '/gigs'
     | '/home'
     | '/notes'
     | '/profile'
+    | '/seniordesk'
     | '/chat/$roomId'
+    | '/doubts/$doubtId'
     | '/lectures/$lectureId'
     | '/notes/$noteId'
+    | '/seniordesk/$questionId'
+    | '/seniordesk/admin'
     | '/chat'
   id:
     | '__root__'
@@ -156,13 +211,18 @@ export interface FileRouteTypes {
     | '/_app'
     | '/login'
     | '/signup'
+    | '/_app/doubts'
     | '/_app/gigs'
     | '/_app/home'
     | '/_app/notes'
     | '/_app/profile'
+    | '/_app/seniordesk'
     | '/_app/chat/$roomId'
+    | '/_app/doubts/$doubtId'
     | '/_app/lectures/$lectureId'
     | '/_app/notes/$noteId'
+    | '/_app/seniordesk/$questionId'
+    | '/_app/seniordesk/admin'
     | '/_app/chat/'
   fileRoutesById: FileRoutesById
 }
@@ -203,6 +263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/seniordesk': {
+      id: '/_app/seniordesk'
+      path: '/seniordesk'
+      fullPath: '/seniordesk'
+      preLoaderRoute: typeof AppSeniordeskRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/profile': {
       id: '/_app/profile'
       path: '/profile'
@@ -231,12 +298,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppGigsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/doubts': {
+      id: '/_app/doubts'
+      path: '/doubts'
+      fullPath: '/doubts'
+      preLoaderRoute: typeof AppDoubtsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/chat/': {
       id: '/_app/chat/'
       path: '/chat'
       fullPath: '/chat/'
       preLoaderRoute: typeof AppChatIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/_app/seniordesk/admin': {
+      id: '/_app/seniordesk/admin'
+      path: '/admin'
+      fullPath: '/seniordesk/admin'
+      preLoaderRoute: typeof AppSeniordeskAdminRouteImport
+      parentRoute: typeof AppSeniordeskRoute
+    }
+    '/_app/seniordesk/$questionId': {
+      id: '/_app/seniordesk/$questionId'
+      path: '/$questionId'
+      fullPath: '/seniordesk/$questionId'
+      preLoaderRoute: typeof AppSeniordeskQuestionIdRouteImport
+      parentRoute: typeof AppSeniordeskRoute
     }
     '/_app/notes/$noteId': {
       id: '/_app/notes/$noteId'
@@ -252,6 +340,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLecturesLectureIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/doubts/$doubtId': {
+      id: '/_app/doubts/$doubtId'
+      path: '/$doubtId'
+      fullPath: '/doubts/$doubtId'
+      preLoaderRoute: typeof AppDoubtsDoubtIdRouteImport
+      parentRoute: typeof AppDoubtsRoute
+    }
     '/_app/chat/$roomId': {
       id: '/_app/chat/$roomId'
       path: '/chat/$roomId'
@@ -261,6 +356,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AppDoubtsRouteChildren {
+  AppDoubtsDoubtIdRoute: typeof AppDoubtsDoubtIdRoute
+}
+
+const AppDoubtsRouteChildren: AppDoubtsRouteChildren = {
+  AppDoubtsDoubtIdRoute: AppDoubtsDoubtIdRoute,
+}
+
+const AppDoubtsRouteWithChildren = AppDoubtsRoute._addFileChildren(
+  AppDoubtsRouteChildren,
+)
 
 interface AppNotesRouteChildren {
   AppNotesNoteIdRoute: typeof AppNotesNoteIdRoute
@@ -274,21 +381,39 @@ const AppNotesRouteWithChildren = AppNotesRoute._addFileChildren(
   AppNotesRouteChildren,
 )
 
+interface AppSeniordeskRouteChildren {
+  AppSeniordeskQuestionIdRoute: typeof AppSeniordeskQuestionIdRoute
+  AppSeniordeskAdminRoute: typeof AppSeniordeskAdminRoute
+}
+
+const AppSeniordeskRouteChildren: AppSeniordeskRouteChildren = {
+  AppSeniordeskQuestionIdRoute: AppSeniordeskQuestionIdRoute,
+  AppSeniordeskAdminRoute: AppSeniordeskAdminRoute,
+}
+
+const AppSeniordeskRouteWithChildren = AppSeniordeskRoute._addFileChildren(
+  AppSeniordeskRouteChildren,
+)
+
 interface AppRouteChildren {
+  AppDoubtsRoute: typeof AppDoubtsRouteWithChildren
   AppGigsRoute: typeof AppGigsRoute
   AppHomeRoute: typeof AppHomeRoute
   AppNotesRoute: typeof AppNotesRouteWithChildren
   AppProfileRoute: typeof AppProfileRoute
+  AppSeniordeskRoute: typeof AppSeniordeskRouteWithChildren
   AppChatRoomIdRoute: typeof AppChatRoomIdRoute
   AppLecturesLectureIdRoute: typeof AppLecturesLectureIdRoute
   AppChatIndexRoute: typeof AppChatIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppDoubtsRoute: AppDoubtsRouteWithChildren,
   AppGigsRoute: AppGigsRoute,
   AppHomeRoute: AppHomeRoute,
   AppNotesRoute: AppNotesRouteWithChildren,
   AppProfileRoute: AppProfileRoute,
+  AppSeniordeskRoute: AppSeniordeskRouteWithChildren,
   AppChatRoomIdRoute: AppChatRoomIdRoute,
   AppLecturesLectureIdRoute: AppLecturesLectureIdRoute,
   AppChatIndexRoute: AppChatIndexRoute,
