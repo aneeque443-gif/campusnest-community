@@ -923,7 +923,13 @@ export type Database = {
       my_doubt_ids: { Args: never; Returns: string[] }
     }
     Enums: {
-      app_role: "student" | "teacher" | "admin" | "class_rep" | "senior_mentor"
+      app_role:
+        | "student"
+        | "teacher"
+        | "admin"
+        | "class_rep"
+        | "senior_mentor"
+        | "reporter"
       chat_room_kind: "class" | "open" | "study_group" | "dm"
       doubt_category:
         | "academic"
@@ -1065,7 +1071,14 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["student", "teacher", "admin", "class_rep", "senior_mentor"],
+      app_role: [
+        "student",
+        "teacher",
+        "admin",
+        "class_rep",
+        "senior_mentor",
+        "reporter",
+      ],
       chat_room_kind: ["class", "open", "study_group", "dm"],
       doubt_category: [
         "academic",
