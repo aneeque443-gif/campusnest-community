@@ -21,6 +21,7 @@ import { Route as AppFeedRouteImport } from './routes/_app.feed'
 import { Route as AppChatIndexRouteImport } from './routes/_app.chat.index'
 import { Route as AppNotesNoteIdRouteImport } from './routes/_app.notes.$noteId'
 import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures.$lectureId'
+import { Route as AppFeedPostIdRouteImport } from './routes/_app.feed.$postId'
 import { Route as AppChatRoomIdRouteImport } from './routes/_app.chat.$roomId'
 
 const SignupRoute = SignupRouteImport.update({
@@ -82,6 +83,11 @@ const AppLecturesLectureIdRoute = AppLecturesLectureIdRouteImport.update({
   path: '/lectures/$lectureId',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFeedPostIdRoute = AppFeedPostIdRouteImport.update({
+  id: '/$postId',
+  path: '/$postId',
+  getParentRoute: () => AppFeedRoute,
+} as any)
 const AppChatRoomIdRoute = AppChatRoomIdRouteImport.update({
   id: '/chat/$roomId',
   path: '/chat/$roomId',
@@ -92,12 +98,13 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/feed': typeof AppFeedRoute
+  '/feed': typeof AppFeedRouteWithChildren
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
   '/profile': typeof AppProfileRoute
   '/chat/$roomId': typeof AppChatRoomIdRoute
+  '/feed/$postId': typeof AppFeedPostIdRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
   '/chat/': typeof AppChatIndexRoute
@@ -106,12 +113,13 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/feed': typeof AppFeedRoute
+  '/feed': typeof AppFeedRouteWithChildren
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
   '/profile': typeof AppProfileRoute
   '/chat/$roomId': typeof AppChatRoomIdRoute
+  '/feed/$postId': typeof AppFeedPostIdRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
   '/chat': typeof AppChatIndexRoute
@@ -122,12 +130,13 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/_app/feed': typeof AppFeedRoute
+  '/_app/feed': typeof AppFeedRouteWithChildren
   '/_app/gigs': typeof AppGigsRoute
   '/_app/home': typeof AppHomeRoute
   '/_app/notes': typeof AppNotesRouteWithChildren
   '/_app/profile': typeof AppProfileRoute
   '/_app/chat/$roomId': typeof AppChatRoomIdRoute
+  '/_app/feed/$postId': typeof AppFeedPostIdRoute
   '/_app/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/_app/notes/$noteId': typeof AppNotesNoteIdRoute
   '/_app/chat/': typeof AppChatIndexRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/notes'
     | '/profile'
     | '/chat/$roomId'
+    | '/feed/$postId'
     | '/lectures/$lectureId'
     | '/notes/$noteId'
     | '/chat/'
@@ -158,6 +168,7 @@ export interface FileRouteTypes {
     | '/notes'
     | '/profile'
     | '/chat/$roomId'
+    | '/feed/$postId'
     | '/lectures/$lectureId'
     | '/notes/$noteId'
     | '/chat'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/_app/notes'
     | '/_app/profile'
     | '/_app/chat/$roomId'
+    | '/_app/feed/$postId'
     | '/_app/lectures/$lectureId'
     | '/_app/notes/$noteId'
     | '/_app/chat/'
@@ -271,6 +283,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLecturesLectureIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/feed/$postId': {
+      id: '/_app/feed/$postId'
+      path: '/$postId'
+      fullPath: '/feed/$postId'
+      preLoaderRoute: typeof AppFeedPostIdRouteImport
+      parentRoute: typeof AppFeedRoute
+    }
     '/_app/chat/$roomId': {
       id: '/_app/chat/$roomId'
       path: '/chat/$roomId'
@@ -280,6 +299,17 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AppFeedRouteChildren {
+  AppFeedPostIdRoute: typeof AppFeedPostIdRoute
+}
+
+const AppFeedRouteChildren: AppFeedRouteChildren = {
+  AppFeedPostIdRoute: AppFeedPostIdRoute,
+}
+
+const AppFeedRouteWithChildren =
+  AppFeedRoute._addFileChildren(AppFeedRouteChildren)
 
 interface AppNotesRouteChildren {
   AppNotesNoteIdRoute: typeof AppNotesNoteIdRoute
@@ -294,7 +324,7 @@ const AppNotesRouteWithChildren = AppNotesRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
-  AppFeedRoute: typeof AppFeedRoute
+  AppFeedRoute: typeof AppFeedRouteWithChildren
   AppGigsRoute: typeof AppGigsRoute
   AppHomeRoute: typeof AppHomeRoute
   AppNotesRoute: typeof AppNotesRouteWithChildren
@@ -305,7 +335,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppFeedRoute: AppFeedRoute,
+  AppFeedRoute: AppFeedRouteWithChildren,
   AppGigsRoute: AppGigsRoute,
   AppHomeRoute: AppHomeRoute,
   AppNotesRoute: AppNotesRouteWithChildren,
