@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { useRoles } from "@/lib/use-role";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,8 @@ import {
   Plus,
   Upload,
   Bookmark,
+  Newspaper,
+  BadgeCheck,
 } from "lucide-react";
 
 type Profile = {
@@ -51,6 +54,7 @@ export const Route = createFileRoute("/_app/profile")({
 
 function ProfilePage() {
   const { user, signOut } = useAuth();
+  const { isReporter, roles } = useRoles();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [editOpen, setEditOpen] = useState(false);
@@ -62,6 +66,7 @@ function ProfilePage() {
   const [library, setLibrary] = useState<
     { id: string; title: string; subject: string }[]
   >([]);
+  const [reporterStats, setReporterStats] = useState<{ posts: number; likes: number } | null>(null);
 
   async function load() {
     if (!user) return;
@@ -87,6 +92,17 @@ function ProfilePage() {
         .map((row: { notes: { id: string; title: string; subject: string } | null }) => row.notes)
         .filter((n): n is { id: string; title: string; subject: string } => !!n),
     );
+    // Reporter stats
+    const { data: rp } = await supabase
+      .from("feed_posts")
+      .select("like_count")
+      .eq("author_id", user.id);
+    if (rp && rp.length > 0) {
+      const totalLikes = rp.reduce((s: number, p: { like_count: number }) => s + (p.like_count ?? 0), 0);
+      setReporterStats({ posts: rp.length, likes: totalLikes });
+    } else {
+      setReporterStats(null);
+    }
     setLoading(false);
   }
 
