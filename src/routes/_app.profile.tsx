@@ -184,6 +184,14 @@ function ProfilePage() {
             <div className="mt-1 flex gap-2">
               <Badge variant="secondary">{profile.year}</Badge>
               <Badge variant="secondary">{profile.branch}</Badge>
+              {isReporter && (
+                <Badge className="gap-1 bg-accent text-accent-foreground">
+                  <BadgeCheck className="h-3 w-3" /> Reporter
+                </Badge>
+              )}
+              {roles.includes("senior_mentor") && (
+                <Badge className="gap-1">Senior Mentor</Badge>
+              )}
             </div>
             <div className="mt-3 flex w-full gap-2">
               <Dialog open={editOpen} onOpenChange={setEditOpen}>
