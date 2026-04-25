@@ -337,6 +337,28 @@ function ProfilePage() {
         </CardContent>
       </Card>
 
+      {reporterStats && (
+        <Card className="shadow-[var(--shadow-card)]">
+          <CardHeader className="pb-2">
+            <h2 className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
+              <Newspaper className="h-4 w-4 text-accent" /> Reporter stats
+            </h2>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 gap-3 text-center">
+              <div className="rounded-md bg-muted p-3">
+                <p className="text-lg font-bold text-foreground">{reporterStats.posts}</p>
+                <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Articles</p>
+              </div>
+              <div className="rounded-md bg-muted p-3">
+                <p className="text-lg font-bold text-foreground">{reporterStats.likes}</p>
+                <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Likes received</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* My Library */}
       <Card className="shadow-[var(--shadow-card)]">
         <CardHeader className="pb-2">
