@@ -24,6 +24,7 @@ import { Route as AppSeniordeskAdminRouteImport } from './routes/_app.seniordesk
 import { Route as AppSeniordeskQuestionIdRouteImport } from './routes/_app.seniordesk.$questionId'
 import { Route as AppNotesNoteIdRouteImport } from './routes/_app.notes.$noteId'
 import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures.$lectureId'
+import { Route as AppDoubtsDoubtIdRouteImport } from './routes/_app.doubts.$doubtId'
 import { Route as AppChatRoomIdRouteImport } from './routes/_app.chat.$roomId'
 
 const SignupRoute = SignupRouteImport.update({
@@ -100,6 +101,11 @@ const AppLecturesLectureIdRoute = AppLecturesLectureIdRouteImport.update({
   path: '/lectures/$lectureId',
   getParentRoute: () => AppRoute,
 } as any)
+const AppDoubtsDoubtIdRoute = AppDoubtsDoubtIdRouteImport.update({
+  id: '/$doubtId',
+  path: '/$doubtId',
+  getParentRoute: () => AppDoubtsRoute,
+} as any)
 const AppChatRoomIdRoute = AppChatRoomIdRouteImport.update({
   id: '/chat/$roomId',
   path: '/chat/$roomId',
@@ -110,13 +116,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/doubts': typeof AppDoubtsRoute
+  '/doubts': typeof AppDoubtsRouteWithChildren
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
   '/profile': typeof AppProfileRoute
   '/seniordesk': typeof AppSeniordeskRouteWithChildren
   '/chat/$roomId': typeof AppChatRoomIdRoute
+  '/doubts/$doubtId': typeof AppDoubtsDoubtIdRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
   '/seniordesk/$questionId': typeof AppSeniordeskQuestionIdRoute
@@ -127,13 +134,14 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/doubts': typeof AppDoubtsRoute
+  '/doubts': typeof AppDoubtsRouteWithChildren
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
   '/profile': typeof AppProfileRoute
   '/seniordesk': typeof AppSeniordeskRouteWithChildren
   '/chat/$roomId': typeof AppChatRoomIdRoute
+  '/doubts/$doubtId': typeof AppDoubtsDoubtIdRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
   '/seniordesk/$questionId': typeof AppSeniordeskQuestionIdRoute
@@ -146,13 +154,14 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/_app/doubts': typeof AppDoubtsRoute
+  '/_app/doubts': typeof AppDoubtsRouteWithChildren
   '/_app/gigs': typeof AppGigsRoute
   '/_app/home': typeof AppHomeRoute
   '/_app/notes': typeof AppNotesRouteWithChildren
   '/_app/profile': typeof AppProfileRoute
   '/_app/seniordesk': typeof AppSeniordeskRouteWithChildren
   '/_app/chat/$roomId': typeof AppChatRoomIdRoute
+  '/_app/doubts/$doubtId': typeof AppDoubtsDoubtIdRoute
   '/_app/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/_app/notes/$noteId': typeof AppNotesNoteIdRoute
   '/_app/seniordesk/$questionId': typeof AppSeniordeskQuestionIdRoute
@@ -172,6 +181,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/seniordesk'
     | '/chat/$roomId'
+    | '/doubts/$doubtId'
     | '/lectures/$lectureId'
     | '/notes/$noteId'
     | '/seniordesk/$questionId'
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/seniordesk'
     | '/chat/$roomId'
+    | '/doubts/$doubtId'
     | '/lectures/$lectureId'
     | '/notes/$noteId'
     | '/seniordesk/$questionId'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/_app/profile'
     | '/_app/seniordesk'
     | '/_app/chat/$roomId'
+    | '/_app/doubts/$doubtId'
     | '/_app/lectures/$lectureId'
     | '/_app/notes/$noteId'
     | '/_app/seniordesk/$questionId'
@@ -328,6 +340,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLecturesLectureIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/doubts/$doubtId': {
+      id: '/_app/doubts/$doubtId'
+      path: '/$doubtId'
+      fullPath: '/doubts/$doubtId'
+      preLoaderRoute: typeof AppDoubtsDoubtIdRouteImport
+      parentRoute: typeof AppDoubtsRoute
+    }
     '/_app/chat/$roomId': {
       id: '/_app/chat/$roomId'
       path: '/chat/$roomId'
@@ -337,6 +356,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AppDoubtsRouteChildren {
+  AppDoubtsDoubtIdRoute: typeof AppDoubtsDoubtIdRoute
+}
+
+const AppDoubtsRouteChildren: AppDoubtsRouteChildren = {
+  AppDoubtsDoubtIdRoute: AppDoubtsDoubtIdRoute,
+}
+
+const AppDoubtsRouteWithChildren = AppDoubtsRoute._addFileChildren(
+  AppDoubtsRouteChildren,
+)
 
 interface AppNotesRouteChildren {
   AppNotesNoteIdRoute: typeof AppNotesNoteIdRoute
@@ -365,7 +396,7 @@ const AppSeniordeskRouteWithChildren = AppSeniordeskRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
-  AppDoubtsRoute: typeof AppDoubtsRoute
+  AppDoubtsRoute: typeof AppDoubtsRouteWithChildren
   AppGigsRoute: typeof AppGigsRoute
   AppHomeRoute: typeof AppHomeRoute
   AppNotesRoute: typeof AppNotesRouteWithChildren
@@ -377,7 +408,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppDoubtsRoute: AppDoubtsRoute,
+  AppDoubtsRoute: AppDoubtsRouteWithChildren,
   AppGigsRoute: AppGigsRoute,
   AppHomeRoute: AppHomeRoute,
   AppNotesRoute: AppNotesRouteWithChildren,
