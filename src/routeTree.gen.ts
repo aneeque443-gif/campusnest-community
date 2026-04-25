@@ -19,6 +19,7 @@ import { Route as AppNotesRouteImport } from './routes/_app.notes'
 import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppGigsRouteImport } from './routes/_app.gigs'
 import { Route as AppChatIndexRouteImport } from './routes/_app.chat.index'
+import { Route as AppSeniordeskAdminRouteImport } from './routes/_app.seniordesk.admin'
 import { Route as AppSeniordeskQuestionIdRouteImport } from './routes/_app.seniordesk.$questionId'
 import { Route as AppNotesNoteIdRouteImport } from './routes/_app.notes.$noteId'
 import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures.$lectureId'
@@ -73,6 +74,11 @@ const AppChatIndexRoute = AppChatIndexRouteImport.update({
   path: '/chat/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSeniordeskAdminRoute = AppSeniordeskAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AppSeniordeskRoute,
+} as any)
 const AppSeniordeskQuestionIdRoute = AppSeniordeskQuestionIdRouteImport.update({
   id: '/$questionId',
   path: '/$questionId',
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
   '/seniordesk/$questionId': typeof AppSeniordeskQuestionIdRoute
+  '/seniordesk/admin': typeof AppSeniordeskAdminRoute
   '/chat/': typeof AppChatIndexRoute
 }
 export interface FileRoutesByTo {
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
   '/seniordesk/$questionId': typeof AppSeniordeskQuestionIdRoute
+  '/seniordesk/admin': typeof AppSeniordeskAdminRoute
   '/chat': typeof AppChatIndexRoute
 }
 export interface FileRoutesById {
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/_app/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/_app/notes/$noteId': typeof AppNotesNoteIdRoute
   '/_app/seniordesk/$questionId': typeof AppSeniordeskQuestionIdRoute
+  '/_app/seniordesk/admin': typeof AppSeniordeskAdminRoute
   '/_app/chat/': typeof AppChatIndexRoute
 }
 export interface FileRouteTypes {
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/lectures/$lectureId'
     | '/notes/$noteId'
     | '/seniordesk/$questionId'
+    | '/seniordesk/admin'
     | '/chat/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/lectures/$lectureId'
     | '/notes/$noteId'
     | '/seniordesk/$questionId'
+    | '/seniordesk/admin'
     | '/chat'
   id:
     | '__root__'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/_app/lectures/$lectureId'
     | '/_app/notes/$noteId'
     | '/_app/seniordesk/$questionId'
+    | '/_app/seniordesk/admin'
     | '/_app/chat/'
   fileRoutesById: FileRoutesById
 }
@@ -269,6 +281,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppChatIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/seniordesk/admin': {
+      id: '/_app/seniordesk/admin'
+      path: '/admin'
+      fullPath: '/seniordesk/admin'
+      preLoaderRoute: typeof AppSeniordeskAdminRouteImport
+      parentRoute: typeof AppSeniordeskRoute
+    }
     '/_app/seniordesk/$questionId': {
       id: '/_app/seniordesk/$questionId'
       path: '/$questionId'
@@ -314,10 +333,12 @@ const AppNotesRouteWithChildren = AppNotesRoute._addFileChildren(
 
 interface AppSeniordeskRouteChildren {
   AppSeniordeskQuestionIdRoute: typeof AppSeniordeskQuestionIdRoute
+  AppSeniordeskAdminRoute: typeof AppSeniordeskAdminRoute
 }
 
 const AppSeniordeskRouteChildren: AppSeniordeskRouteChildren = {
   AppSeniordeskQuestionIdRoute: AppSeniordeskQuestionIdRoute,
+  AppSeniordeskAdminRoute: AppSeniordeskAdminRoute,
 }
 
 const AppSeniordeskRouteWithChildren = AppSeniordeskRoute._addFileChildren(
