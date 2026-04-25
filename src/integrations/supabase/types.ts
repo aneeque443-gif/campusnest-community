@@ -245,6 +245,106 @@ export type Database = {
           },
         ]
       }
+      doubt_replies: {
+        Row: {
+          content: string
+          created_at: string
+          doubt_id: string
+          id: string
+          replier_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          doubt_id: string
+          id?: string
+          replier_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          doubt_id?: string
+          id?: string
+          replier_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doubt_replies_doubt_id_fkey"
+            columns: ["doubt_id"]
+            isOneToOne: false
+            referencedRelation: "doubts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doubt_upvotes: {
+        Row: {
+          created_at: string
+          doubt_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          doubt_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          doubt_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doubt_upvotes_doubt_id_fkey"
+            columns: ["doubt_id"]
+            isOneToOne: false
+            referencedRelation: "doubts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doubts: {
+        Row: {
+          author_id: string
+          category: Database["public"]["Enums"]["doubt_category"]
+          content: string
+          created_at: string
+          id: string
+          is_answered: boolean
+          is_revealed: boolean
+          reply_count: number
+          updated_at: string
+          upvote_count: number
+        }
+        Insert: {
+          author_id: string
+          category: Database["public"]["Enums"]["doubt_category"]
+          content: string
+          created_at?: string
+          id?: string
+          is_answered?: boolean
+          is_revealed?: boolean
+          reply_count?: number
+          updated_at?: string
+          upvote_count?: number
+        }
+        Update: {
+          author_id?: string
+          category?: Database["public"]["Enums"]["doubt_category"]
+          content?: string
+          created_at?: string
+          id?: string
+          is_answered?: boolean
+          is_revealed?: boolean
+          reply_count?: number
+          updated_at?: string
+          upvote_count?: number
+        }
+        Relationships: []
+      }
       lecture_comments: {
         Row: {
           content: string
@@ -633,6 +733,139 @@ export type Database = {
         }
         Relationships: []
       }
+      senior_answer_upvotes: {
+        Row: {
+          answer_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          answer_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          answer_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "senior_answer_upvotes_answer_id_fkey"
+            columns: ["answer_id"]
+            isOneToOne: false
+            referencedRelation: "senior_answers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      senior_answers: {
+        Row: {
+          answerer_id: string
+          content: string
+          created_at: string
+          id: string
+          is_pinned: boolean
+          question_id: string
+          updated_at: string
+          upvote_count: number
+        }
+        Insert: {
+          answerer_id: string
+          content: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean
+          question_id: string
+          updated_at?: string
+          upvote_count?: number
+        }
+        Update: {
+          answerer_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean
+          question_id?: string
+          updated_at?: string
+          upvote_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "senior_answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "senior_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      senior_invites: {
+        Row: {
+          claimed_at: string | null
+          claimed_by: string | null
+          created_at: string
+          enrollment_id: string
+          id: string
+          invited_by: string
+        }
+        Insert: {
+          claimed_at?: string | null
+          claimed_by?: string | null
+          created_at?: string
+          enrollment_id: string
+          id?: string
+          invited_by: string
+        }
+        Update: {
+          claimed_at?: string | null
+          claimed_by?: string | null
+          created_at?: string
+          enrollment_id?: string
+          id?: string
+          invited_by?: string
+        }
+        Relationships: []
+      }
+      senior_questions: {
+        Row: {
+          answer_count: number
+          asker_id: string
+          category: Database["public"]["Enums"]["senior_question_category"]
+          created_at: string
+          description: string
+          id: string
+          is_anonymous: boolean
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          answer_count?: number
+          asker_id: string
+          category: Database["public"]["Enums"]["senior_question_category"]
+          created_at?: string
+          description?: string
+          id?: string
+          is_anonymous?: boolean
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          answer_count?: number
+          asker_id?: string
+          category?: Database["public"]["Enums"]["senior_question_category"]
+          created_at?: string
+          description?: string
+          id?: string
+          is_anonymous?: boolean
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -682,14 +915,27 @@ export type Database = {
         Args: { _lecture_id: string }
         Returns: undefined
       }
+      is_doubt_author: { Args: { _doubt_id: string }; Returns: boolean }
       is_room_member: {
         Args: { _room_id: string; _user_id: string }
         Returns: boolean
       }
+      my_doubt_ids: { Args: never; Returns: string[] }
     }
     Enums: {
       app_role: "student" | "teacher" | "admin" | "class_rep" | "senior_mentor"
       chat_room_kind: "class" | "open" | "study_group" | "dm"
+      doubt_category:
+        | "academic"
+        | "personal_guidance"
+        | "college_complaint"
+        | "exam_stress"
+        | "career_confusion"
+      senior_question_category:
+        | "academic"
+        | "career"
+        | "personal_growth"
+        | "college_life"
       student_branch: "IT" | "CS" | "EXTC" | "Mechanical"
       student_year: "FYIT" | "SYIT" | "TYIT"
     }
@@ -821,6 +1067,19 @@ export const Constants = {
     Enums: {
       app_role: ["student", "teacher", "admin", "class_rep", "senior_mentor"],
       chat_room_kind: ["class", "open", "study_group", "dm"],
+      doubt_category: [
+        "academic",
+        "personal_guidance",
+        "college_complaint",
+        "exam_stress",
+        "career_confusion",
+      ],
+      senior_question_category: [
+        "academic",
+        "career",
+        "personal_growth",
+        "college_life",
+      ],
       student_branch: ["IT", "CS", "EXTC", "Mechanical"],
       student_year: ["FYIT", "SYIT", "TYIT"],
     },
