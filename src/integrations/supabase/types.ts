@@ -345,6 +345,259 @@ export type Database = {
         }
         Relationships: []
       }
+      feed_event_rsvps: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_event_rsvps_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "feed_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_poll_options: {
+        Row: {
+          created_at: string
+          id: string
+          position: number
+          post_id: string
+          text: string
+          vote_count: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          position?: number
+          post_id: string
+          text: string
+          vote_count?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          position?: number
+          post_id?: string
+          text?: string
+          vote_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_poll_options_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "feed_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_poll_votes: {
+        Row: {
+          created_at: string
+          id: string
+          option_id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          option_id: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          option_id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_poll_votes_option_id_fkey"
+            columns: ["option_id"]
+            isOneToOne: false
+            referencedRelation: "feed_poll_options"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feed_poll_votes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "feed_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_post_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "feed_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_post_likes: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_post_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "feed_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_post_photos: {
+        Row: {
+          caption: string
+          created_at: string
+          id: string
+          image_url: string
+          position: number
+          post_id: string
+        }
+        Insert: {
+          caption?: string
+          created_at?: string
+          id?: string
+          image_url: string
+          position?: number
+          post_id: string
+        }
+        Update: {
+          caption?: string
+          created_at?: string
+          id?: string
+          image_url?: string
+          position?: number
+          post_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_post_photos_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "feed_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_posts: {
+        Row: {
+          author_id: string
+          body: string
+          comment_count: number
+          cover_image: string | null
+          created_at: string
+          event_date: string | null
+          event_location: string | null
+          id: string
+          is_pinned: boolean
+          like_count: number
+          poll_question: string | null
+          tags: string[]
+          title: string
+          type: Database["public"]["Enums"]["feed_post_type"]
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          body?: string
+          comment_count?: number
+          cover_image?: string | null
+          created_at?: string
+          event_date?: string | null
+          event_location?: string | null
+          id?: string
+          is_pinned?: boolean
+          like_count?: number
+          poll_question?: string | null
+          tags?: string[]
+          title: string
+          type: Database["public"]["Enums"]["feed_post_type"]
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          comment_count?: number
+          cover_image?: string | null
+          created_at?: string
+          event_date?: string | null
+          event_location?: string | null
+          id?: string
+          is_pinned?: boolean
+          like_count?: number
+          poll_question?: string | null
+          tags?: string[]
+          title?: string
+          type?: Database["public"]["Enums"]["feed_post_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       lecture_comments: {
         Row: {
           content: string
@@ -733,6 +986,48 @@ export type Database = {
         }
         Relationships: []
       }
+      reporter_applications: {
+        Row: {
+          applicant_id: string
+          created_at: string
+          full_name: string
+          id: string
+          reason: string
+          reviewed_at: string | null
+          reviewer_id: string | null
+          status: string
+          updated_at: string
+          writing_sample: string
+          year: Database["public"]["Enums"]["student_year"]
+        }
+        Insert: {
+          applicant_id: string
+          created_at?: string
+          full_name: string
+          id?: string
+          reason: string
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          status?: string
+          updated_at?: string
+          writing_sample: string
+          year: Database["public"]["Enums"]["student_year"]
+        }
+        Update: {
+          applicant_id?: string
+          created_at?: string
+          full_name?: string
+          id?: string
+          reason?: string
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          status?: string
+          updated_at?: string
+          writing_sample?: string
+          year?: Database["public"]["Enums"]["student_year"]
+        }
+        Relationships: []
+      }
       senior_answer_upvotes: {
         Row: {
           answer_id: string
@@ -937,6 +1232,7 @@ export type Database = {
         | "college_complaint"
         | "exam_stress"
         | "career_confusion"
+      feed_post_type: "article" | "photo_story" | "event" | "poll"
       senior_question_category:
         | "academic"
         | "career"
@@ -1087,6 +1383,7 @@ export const Constants = {
         "exam_stress",
         "career_confusion",
       ],
+      feed_post_type: ["article", "photo_story", "event", "poll"],
       senior_question_category: [
         "academic",
         "career",
