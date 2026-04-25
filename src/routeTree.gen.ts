@@ -17,6 +17,7 @@ import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppNotesRouteImport } from './routes/_app.notes'
 import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppGigsRouteImport } from './routes/_app.gigs'
+import { Route as AppFeedRouteImport } from './routes/_app.feed'
 import { Route as AppChatIndexRouteImport } from './routes/_app.chat.index'
 import { Route as AppNotesNoteIdRouteImport } from './routes/_app.notes.$noteId'
 import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures.$lectureId'
@@ -61,6 +62,11 @@ const AppGigsRoute = AppGigsRouteImport.update({
   path: '/gigs',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFeedRoute = AppFeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppChatIndexRoute = AppChatIndexRouteImport.update({
   id: '/chat/',
   path: '/chat/',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/feed': typeof AppFeedRoute
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/feed': typeof AppFeedRoute
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
@@ -114,6 +122,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/_app/feed': typeof AppFeedRoute
   '/_app/gigs': typeof AppGigsRoute
   '/_app/home': typeof AppHomeRoute
   '/_app/notes': typeof AppNotesRouteWithChildren
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/signup'
+    | '/feed'
     | '/gigs'
     | '/home'
     | '/notes'
@@ -142,6 +152,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/signup'
+    | '/feed'
     | '/gigs'
     | '/home'
     | '/notes'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/login'
     | '/signup'
+    | '/_app/feed'
     | '/_app/gigs'
     | '/_app/home'
     | '/_app/notes'
@@ -231,6 +243,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppGigsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/feed': {
+      id: '/_app/feed'
+      path: '/feed'
+      fullPath: '/feed'
+      preLoaderRoute: typeof AppFeedRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/chat/': {
       id: '/_app/chat/'
       path: '/chat'
@@ -275,6 +294,7 @@ const AppNotesRouteWithChildren = AppNotesRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
+  AppFeedRoute: typeof AppFeedRoute
   AppGigsRoute: typeof AppGigsRoute
   AppHomeRoute: typeof AppHomeRoute
   AppNotesRoute: typeof AppNotesRouteWithChildren
@@ -285,6 +305,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppFeedRoute: AppFeedRoute,
   AppGigsRoute: AppGigsRoute,
   AppHomeRoute: AppHomeRoute,
   AppNotesRoute: AppNotesRouteWithChildren,
