@@ -21,6 +21,7 @@ import { Route as AppFeedRouteImport } from './routes/_app.feed'
 import { Route as AppChatIndexRouteImport } from './routes/_app.chat.index'
 import { Route as AppNotesNoteIdRouteImport } from './routes/_app.notes.$noteId'
 import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures.$lectureId'
+import { Route as AppFeedAdminRouteImport } from './routes/_app.feed.admin'
 import { Route as AppFeedPostIdRouteImport } from './routes/_app.feed.$postId'
 import { Route as AppChatRoomIdRouteImport } from './routes/_app.chat.$roomId'
 
@@ -83,6 +84,11 @@ const AppLecturesLectureIdRoute = AppLecturesLectureIdRouteImport.update({
   path: '/lectures/$lectureId',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFeedAdminRoute = AppFeedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AppFeedRoute,
+} as any)
 const AppFeedPostIdRoute = AppFeedPostIdRouteImport.update({
   id: '/$postId',
   path: '/$postId',
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AppProfileRoute
   '/chat/$roomId': typeof AppChatRoomIdRoute
   '/feed/$postId': typeof AppFeedPostIdRoute
+  '/feed/admin': typeof AppFeedAdminRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
   '/chat/': typeof AppChatIndexRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/profile': typeof AppProfileRoute
   '/chat/$roomId': typeof AppChatRoomIdRoute
   '/feed/$postId': typeof AppFeedPostIdRoute
+  '/feed/admin': typeof AppFeedAdminRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
   '/chat': typeof AppChatIndexRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/_app/profile': typeof AppProfileRoute
   '/_app/chat/$roomId': typeof AppChatRoomIdRoute
   '/_app/feed/$postId': typeof AppFeedPostIdRoute
+  '/_app/feed/admin': typeof AppFeedAdminRoute
   '/_app/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/_app/notes/$noteId': typeof AppNotesNoteIdRoute
   '/_app/chat/': typeof AppChatIndexRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/chat/$roomId'
     | '/feed/$postId'
+    | '/feed/admin'
     | '/lectures/$lectureId'
     | '/notes/$noteId'
     | '/chat/'
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/chat/$roomId'
     | '/feed/$postId'
+    | '/feed/admin'
     | '/lectures/$lectureId'
     | '/notes/$noteId'
     | '/chat'
@@ -185,6 +196,7 @@ export interface FileRouteTypes {
     | '/_app/profile'
     | '/_app/chat/$roomId'
     | '/_app/feed/$postId'
+    | '/_app/feed/admin'
     | '/_app/lectures/$lectureId'
     | '/_app/notes/$noteId'
     | '/_app/chat/'
@@ -283,6 +295,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLecturesLectureIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/feed/admin': {
+      id: '/_app/feed/admin'
+      path: '/admin'
+      fullPath: '/feed/admin'
+      preLoaderRoute: typeof AppFeedAdminRouteImport
+      parentRoute: typeof AppFeedRoute
+    }
     '/_app/feed/$postId': {
       id: '/_app/feed/$postId'
       path: '/$postId'
@@ -302,10 +321,12 @@ declare module '@tanstack/react-router' {
 
 interface AppFeedRouteChildren {
   AppFeedPostIdRoute: typeof AppFeedPostIdRoute
+  AppFeedAdminRoute: typeof AppFeedAdminRoute
 }
 
 const AppFeedRouteChildren: AppFeedRouteChildren = {
   AppFeedPostIdRoute: AppFeedPostIdRoute,
+  AppFeedAdminRoute: AppFeedAdminRoute,
 }
 
 const AppFeedRouteWithChildren =
