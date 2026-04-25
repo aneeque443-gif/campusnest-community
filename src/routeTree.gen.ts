@@ -13,11 +13,13 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppSeniordeskRouteImport } from './routes/_app.seniordesk'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppNotesRouteImport } from './routes/_app.notes'
 import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppGigsRouteImport } from './routes/_app.gigs'
 import { Route as AppChatIndexRouteImport } from './routes/_app.chat.index'
+import { Route as AppSeniordeskQuestionIdRouteImport } from './routes/_app.seniordesk.$questionId'
 import { Route as AppNotesNoteIdRouteImport } from './routes/_app.notes.$noteId'
 import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures.$lectureId'
 import { Route as AppChatRoomIdRouteImport } from './routes/_app.chat.$roomId'
@@ -40,6 +42,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppSeniordeskRoute = AppSeniordeskRouteImport.update({
+  id: '/seniordesk',
+  path: '/seniordesk',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/profile',
@@ -66,6 +73,11 @@ const AppChatIndexRoute = AppChatIndexRouteImport.update({
   path: '/chat/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSeniordeskQuestionIdRoute = AppSeniordeskQuestionIdRouteImport.update({
+  id: '/$questionId',
+  path: '/$questionId',
+  getParentRoute: () => AppSeniordeskRoute,
+} as any)
 const AppNotesNoteIdRoute = AppNotesNoteIdRouteImport.update({
   id: '/$noteId',
   path: '/$noteId',
@@ -90,9 +102,11 @@ export interface FileRoutesByFullPath {
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
   '/profile': typeof AppProfileRoute
+  '/seniordesk': typeof AppSeniordeskRouteWithChildren
   '/chat/$roomId': typeof AppChatRoomIdRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
+  '/seniordesk/$questionId': typeof AppSeniordeskQuestionIdRoute
   '/chat/': typeof AppChatIndexRoute
 }
 export interface FileRoutesByTo {
@@ -103,9 +117,11 @@ export interface FileRoutesByTo {
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
   '/profile': typeof AppProfileRoute
+  '/seniordesk': typeof AppSeniordeskRouteWithChildren
   '/chat/$roomId': typeof AppChatRoomIdRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
+  '/seniordesk/$questionId': typeof AppSeniordeskQuestionIdRoute
   '/chat': typeof AppChatIndexRoute
 }
 export interface FileRoutesById {
@@ -118,9 +134,11 @@ export interface FileRoutesById {
   '/_app/home': typeof AppHomeRoute
   '/_app/notes': typeof AppNotesRouteWithChildren
   '/_app/profile': typeof AppProfileRoute
+  '/_app/seniordesk': typeof AppSeniordeskRouteWithChildren
   '/_app/chat/$roomId': typeof AppChatRoomIdRoute
   '/_app/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/_app/notes/$noteId': typeof AppNotesNoteIdRoute
+  '/_app/seniordesk/$questionId': typeof AppSeniordeskQuestionIdRoute
   '/_app/chat/': typeof AppChatIndexRoute
 }
 export interface FileRouteTypes {
@@ -133,9 +151,11 @@ export interface FileRouteTypes {
     | '/home'
     | '/notes'
     | '/profile'
+    | '/seniordesk'
     | '/chat/$roomId'
     | '/lectures/$lectureId'
     | '/notes/$noteId'
+    | '/seniordesk/$questionId'
     | '/chat/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -146,9 +166,11 @@ export interface FileRouteTypes {
     | '/home'
     | '/notes'
     | '/profile'
+    | '/seniordesk'
     | '/chat/$roomId'
     | '/lectures/$lectureId'
     | '/notes/$noteId'
+    | '/seniordesk/$questionId'
     | '/chat'
   id:
     | '__root__'
@@ -160,9 +182,11 @@ export interface FileRouteTypes {
     | '/_app/home'
     | '/_app/notes'
     | '/_app/profile'
+    | '/_app/seniordesk'
     | '/_app/chat/$roomId'
     | '/_app/lectures/$lectureId'
     | '/_app/notes/$noteId'
+    | '/_app/seniordesk/$questionId'
     | '/_app/chat/'
   fileRoutesById: FileRoutesById
 }
@@ -203,6 +227,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/seniordesk': {
+      id: '/_app/seniordesk'
+      path: '/seniordesk'
+      fullPath: '/seniordesk'
+      preLoaderRoute: typeof AppSeniordeskRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/profile': {
       id: '/_app/profile'
       path: '/profile'
@@ -237,6 +268,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/chat/'
       preLoaderRoute: typeof AppChatIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/_app/seniordesk/$questionId': {
+      id: '/_app/seniordesk/$questionId'
+      path: '/$questionId'
+      fullPath: '/seniordesk/$questionId'
+      preLoaderRoute: typeof AppSeniordeskQuestionIdRouteImport
+      parentRoute: typeof AppSeniordeskRoute
     }
     '/_app/notes/$noteId': {
       id: '/_app/notes/$noteId'
@@ -274,11 +312,24 @@ const AppNotesRouteWithChildren = AppNotesRoute._addFileChildren(
   AppNotesRouteChildren,
 )
 
+interface AppSeniordeskRouteChildren {
+  AppSeniordeskQuestionIdRoute: typeof AppSeniordeskQuestionIdRoute
+}
+
+const AppSeniordeskRouteChildren: AppSeniordeskRouteChildren = {
+  AppSeniordeskQuestionIdRoute: AppSeniordeskQuestionIdRoute,
+}
+
+const AppSeniordeskRouteWithChildren = AppSeniordeskRoute._addFileChildren(
+  AppSeniordeskRouteChildren,
+)
+
 interface AppRouteChildren {
   AppGigsRoute: typeof AppGigsRoute
   AppHomeRoute: typeof AppHomeRoute
   AppNotesRoute: typeof AppNotesRouteWithChildren
   AppProfileRoute: typeof AppProfileRoute
+  AppSeniordeskRoute: typeof AppSeniordeskRouteWithChildren
   AppChatRoomIdRoute: typeof AppChatRoomIdRoute
   AppLecturesLectureIdRoute: typeof AppLecturesLectureIdRoute
   AppChatIndexRoute: typeof AppChatIndexRoute
@@ -289,6 +340,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppHomeRoute: AppHomeRoute,
   AppNotesRoute: AppNotesRouteWithChildren,
   AppProfileRoute: AppProfileRoute,
+  AppSeniordeskRoute: AppSeniordeskRouteWithChildren,
   AppChatRoomIdRoute: AppChatRoomIdRoute,
   AppLecturesLectureIdRoute: AppLecturesLectureIdRoute,
   AppChatIndexRoute: AppChatIndexRoute,
