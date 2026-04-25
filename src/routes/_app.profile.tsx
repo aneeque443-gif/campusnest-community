@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { useRoles } from "@/lib/use-role";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,8 @@ import {
   Plus,
   Upload,
   Bookmark,
+  Newspaper,
+  BadgeCheck,
 } from "lucide-react";
 
 type Profile = {
@@ -51,6 +54,7 @@ export const Route = createFileRoute("/_app/profile")({
 
 function ProfilePage() {
   const { user, signOut } = useAuth();
+  const { isReporter, roles } = useRoles();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [editOpen, setEditOpen] = useState(false);
@@ -62,6 +66,7 @@ function ProfilePage() {
   const [library, setLibrary] = useState<
     { id: string; title: string; subject: string }[]
   >([]);
+  const [reporterStats, setReporterStats] = useState<{ posts: number; likes: number } | null>(null);
 
   async function load() {
     if (!user) return;
@@ -87,6 +92,17 @@ function ProfilePage() {
         .map((row: { notes: { id: string; title: string; subject: string } | null }) => row.notes)
         .filter((n): n is { id: string; title: string; subject: string } => !!n),
     );
+    // Reporter stats
+    const { data: rp } = await supabase
+      .from("feed_posts")
+      .select("like_count")
+      .eq("author_id", user.id);
+    if (rp && rp.length > 0) {
+      const totalLikes = rp.reduce((s: number, p: { like_count: number }) => s + (p.like_count ?? 0), 0);
+      setReporterStats({ posts: rp.length, likes: totalLikes });
+    } else {
+      setReporterStats(null);
+    }
     setLoading(false);
   }
 
@@ -168,6 +184,14 @@ function ProfilePage() {
             <div className="mt-1 flex gap-2">
               <Badge variant="secondary">{profile.year}</Badge>
               <Badge variant="secondary">{profile.branch}</Badge>
+              {isReporter && (
+                <Badge className="gap-1 bg-accent text-accent-foreground">
+                  <BadgeCheck className="h-3 w-3" /> Reporter
+                </Badge>
+              )}
+              {roles.includes("senior_mentor") && (
+                <Badge className="gap-1">Senior Mentor</Badge>
+              )}
             </div>
             <div className="mt-3 flex w-full gap-2">
               <Dialog open={editOpen} onOpenChange={setEditOpen}>
@@ -312,6 +336,28 @@ function ProfilePage() {
           <p className="text-sm text-muted-foreground">No achievements yet — start earning!</p>
         </CardContent>
       </Card>
+
+      {reporterStats && (
+        <Card className="shadow-[var(--shadow-card)]">
+          <CardHeader className="pb-2">
+            <h2 className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
+              <Newspaper className="h-4 w-4 text-accent" /> Reporter stats
+            </h2>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 gap-3 text-center">
+              <div className="rounded-md bg-muted p-3">
+                <p className="text-lg font-bold text-foreground">{reporterStats.posts}</p>
+                <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Articles</p>
+              </div>
+              <div className="rounded-md bg-muted p-3">
+                <p className="text-lg font-bold text-foreground">{reporterStats.likes}</p>
+                <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Likes received</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* My Library */}
       <Card className="shadow-[var(--shadow-card)]">
