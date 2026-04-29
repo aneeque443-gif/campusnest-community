@@ -1001,6 +1001,54 @@ export type Database = {
           },
         ]
       }
+      notices: {
+        Row: {
+          attachment_name: string | null
+          attachment_url: string | null
+          author_id: string
+          body: string
+          category: Database["public"]["Enums"]["notice_category"]
+          created_at: string
+          id: string
+          is_pinned: boolean
+          target_branch: Database["public"]["Enums"]["student_branch"] | null
+          target_year: Database["public"]["Enums"]["student_year"] | null
+          title: string
+          updated_at: string
+          urgency: Database["public"]["Enums"]["notice_urgency"]
+        }
+        Insert: {
+          attachment_name?: string | null
+          attachment_url?: string | null
+          author_id: string
+          body?: string
+          category?: Database["public"]["Enums"]["notice_category"]
+          created_at?: string
+          id?: string
+          is_pinned?: boolean
+          target_branch?: Database["public"]["Enums"]["student_branch"] | null
+          target_year?: Database["public"]["Enums"]["student_year"] | null
+          title: string
+          updated_at?: string
+          urgency?: Database["public"]["Enums"]["notice_urgency"]
+        }
+        Update: {
+          attachment_name?: string | null
+          attachment_url?: string | null
+          author_id?: string
+          body?: string
+          category?: Database["public"]["Enums"]["notice_category"]
+          created_at?: string
+          id?: string
+          is_pinned?: boolean
+          target_branch?: Database["public"]["Enums"]["student_branch"] | null
+          target_year?: Database["public"]["Enums"]["student_year"] | null
+          title?: string
+          updated_at?: string
+          urgency?: Database["public"]["Enums"]["notice_urgency"]
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           bio: string | null
@@ -1227,6 +1275,77 @@ export type Database = {
         }
         Relationships: []
       }
+      study_room_bookings: {
+        Row: {
+          booking_date: string
+          created_at: string
+          id: string
+          party_size: number
+          purpose: string
+          room_id: string
+          slot: Database["public"]["Enums"]["room_slot"]
+          status: string
+          user_id: string
+        }
+        Insert: {
+          booking_date: string
+          created_at?: string
+          id?: string
+          party_size?: number
+          purpose?: string
+          room_id: string
+          slot: Database["public"]["Enums"]["room_slot"]
+          status?: string
+          user_id: string
+        }
+        Update: {
+          booking_date?: string
+          created_at?: string
+          id?: string
+          party_size?: number
+          purpose?: string
+          room_id?: string
+          slot?: Database["public"]["Enums"]["room_slot"]
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "study_room_bookings_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "study_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      study_rooms: {
+        Row: {
+          capacity: number
+          created_at: string
+          id: string
+          is_active: boolean
+          location: string
+          name: string
+        }
+        Insert: {
+          capacity?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          location?: string
+          name: string
+        }
+        Update: {
+          capacity?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          location?: string
+          name?: string
+        }
+        Relationships: []
+      }
       user_badges: {
         Row: {
           badge_key: string
@@ -1371,6 +1490,14 @@ export type Database = {
         | "exam_stress"
         | "career_confusion"
       feed_post_type: "article" | "photo_story" | "event" | "poll"
+      notice_category:
+        | "Exam"
+        | "Assignment"
+        | "Class change"
+        | "Event"
+        | "General"
+      notice_urgency: "Normal" | "Urgent"
+      room_slot: "9-11" | "11-13" | "14-16" | "16-18"
       senior_question_category:
         | "academic"
         | "career"
@@ -1522,6 +1649,15 @@ export const Constants = {
         "career_confusion",
       ],
       feed_post_type: ["article", "photo_story", "event", "poll"],
+      notice_category: [
+        "Exam",
+        "Assignment",
+        "Class change",
+        "Event",
+        "General",
+      ],
+      notice_urgency: ["Normal", "Urgent"],
+      room_slot: ["9-11", "11-13", "14-16", "16-18"],
       senior_question_category: [
         "academic",
         "career",
