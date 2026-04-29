@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "@tanstack/react-router";
-import { Newspaper, Sparkles, Flame, Star } from "lucide-react";
+import { Newspaper, Sparkles, Flame, Star, DoorOpen, Megaphone } from "lucide-react";
 import { QuestsCard } from "@/components/gamification/QuestsCard";
 import { LeaderboardCard } from "@/components/gamification/LeaderboardCard";
 import { Badge } from "@/components/ui/badge";
@@ -61,6 +61,33 @@ function HomePage() {
 
       <QuestsCard />
       <LeaderboardCard />
+
+      <div className="grid grid-cols-2 gap-3">
+        <Link to="/rooms">
+          <Card className="h-full shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <DoorOpen className="h-4 w-4 text-accent" /> Book a Room
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <p className="text-[11px] text-muted-foreground">Reserve a study room slot.</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link to="/notices">
+          <Card className="h-full shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <Megaphone className="h-4 w-4 text-accent" /> Notices
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <p className="text-[11px] text-muted-foreground">Department announcements.</p>
+            </CardContent>
+          </Card>
+        </Link>
+      </div>
 
       <Link to="/feed">
         <Card className="shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5">
