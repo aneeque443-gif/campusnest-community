@@ -213,6 +213,48 @@ export type Database = {
           },
         ]
       }
+      daily_quests: {
+        Row: {
+          bonus_awarded: boolean
+          completed: boolean
+          created_at: string
+          id: string
+          progress: number
+          quest_date: string
+          quest_key: string
+          target: number
+          title: string
+          user_id: string
+          xp_reward: number
+        }
+        Insert: {
+          bonus_awarded?: boolean
+          completed?: boolean
+          created_at?: string
+          id?: string
+          progress?: number
+          quest_date?: string
+          quest_key: string
+          target?: number
+          title: string
+          user_id: string
+          xp_reward: number
+        }
+        Update: {
+          bonus_awarded?: boolean
+          completed?: boolean
+          created_at?: string
+          id?: string
+          progress?: number
+          quest_date?: string
+          quest_key?: string
+          target?: number
+          title?: string
+          user_id?: string
+          xp_reward?: number
+        }
+        Relationships: []
+      }
       direct_message_threads: {
         Row: {
           created_at: string
@@ -244,6 +286,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      dm_partners: {
+        Row: {
+          created_at: string
+          id: string
+          partner_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          partner_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          partner_id?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       doubt_replies: {
         Row: {
@@ -946,6 +1009,7 @@ export type Database = {
           enrollment_id: string
           full_name: string
           id: string
+          last_quest_date: string | null
           level: string
           photo_url: string | null
           skills: string[]
@@ -961,6 +1025,7 @@ export type Database = {
           enrollment_id: string
           full_name: string
           id: string
+          last_quest_date?: string | null
           level?: string
           photo_url?: string | null
           skills?: string[]
@@ -976,6 +1041,7 @@ export type Database = {
           enrollment_id?: string
           full_name?: string
           id?: string
+          last_quest_date?: string | null
           level?: string
           photo_url?: string | null
           skills?: string[]
@@ -1161,6 +1227,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_badges: {
+        Row: {
+          badge_key: string
+          earned_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          badge_key: string
+          earned_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          badge_key?: string
+          earned_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -1182,11 +1269,54 @@ export type Database = {
         }
         Relationships: []
       }
+      xp_events: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          kind: string
+          user_id: string
+          week_start: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          kind: string
+          user_id: string
+          week_start?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          kind?: string
+          user_id?: string
+          week_start?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      weekly_leaderboard: {
+        Row: {
+          branch: Database["public"]["Enums"]["student_branch"] | null
+          full_name: string | null
+          level: string | null
+          photo_url: string | null
+          user_id: string | null
+          week_xp: number | null
+          year: Database["public"]["Enums"]["student_year"] | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      bump_lecvault_browse: { Args: { _minutes: number }; Returns: undefined }
+      bump_quest: {
+        Args: { _by?: number; _quest_key: string; _user_id: string }
+        Returns: undefined
+      }
       can_access_room: {
         Args: { _room_id: string; _user_id: string }
         Returns: boolean
@@ -1199,6 +1329,10 @@ export type Database = {
         Args: { _room_id: string; _user_id: string }
         Returns: boolean
       }
+      compute_level: { Args: { _xp: number }; Returns: string }
+      ensure_daily_quests: { Args: { _user_id: string }; Returns: undefined }
+      ensure_my_quests: { Args: never; Returns: undefined }
+      evaluate_badges: { Args: { _user_id: string }; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1214,6 +1348,10 @@ export type Database = {
       is_room_member: {
         Args: { _room_id: string; _user_id: string }
         Returns: boolean
+      }
+      log_xp: {
+        Args: { _amount: number; _kind: string; _user_id: string }
+        Returns: undefined
       }
       my_doubt_ids: { Args: never; Returns: string[] }
     }

@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { BadgesGrid } from "@/components/gamification/BadgesGrid";
+import { useUserBadges, levelColor } from "@/lib/gamification";
 import {
   Dialog,
   DialogContent,
@@ -55,6 +57,7 @@ export const Route = createFileRoute("/_app/profile")({
 function ProfilePage() {
   const { user, signOut } = useAuth();
   const { isReporter, roles } = useRoles();
+  const earnedBadges = useUserBadges(user?.id);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [editOpen, setEditOpen] = useState(false);
@@ -184,6 +187,9 @@ function ProfilePage() {
             <div className="mt-1 flex gap-2">
               <Badge variant="secondary">{profile.year}</Badge>
               <Badge variant="secondary">{profile.branch}</Badge>
+              <Badge variant="secondary" className={levelColor(profile.level)}>
+                {profile.level}
+              </Badge>
               {isReporter && (
                 <Badge className="gap-1 bg-accent text-accent-foreground">
                   <BadgeCheck className="h-3 w-3" /> Reporter
@@ -333,7 +339,12 @@ function ProfilePage() {
           </h2>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">No achievements yet — start earning!</p>
+          <BadgesGrid earnedKeys={earnedBadges} />
+          {earnedBadges.length === 0 && (
+            <p className="mt-2 text-xs text-muted-foreground">
+              Complete quests and contribute to start unlocking badges.
+            </p>
+          )}
         </CardContent>
       </Card>
 

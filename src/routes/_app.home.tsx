@@ -4,7 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "@tanstack/react-router";
-import { Newspaper, Sparkles } from "lucide-react";
+import { Newspaper, Sparkles, Flame, Star } from "lucide-react";
+import { QuestsCard } from "@/components/gamification/QuestsCard";
+import { LeaderboardCard } from "@/components/gamification/LeaderboardCard";
+import { Badge } from "@/components/ui/badge";
+import { levelColor } from "@/lib/gamification";
 
 export const Route = createFileRoute("/_app/home")({
   head: () => ({ meta: [{ title: "Home — CampusNest" }] }),
@@ -14,25 +18,50 @@ export const Route = createFileRoute("/_app/home")({
 function HomePage() {
   const { user } = useAuth();
   const [name, setName] = useState("");
+  const [stats, setStats] = useState<{ xp: number; level: string; streak: number } | null>(null);
 
   useEffect(() => {
     if (!user) return;
     supabase
       .from("profiles")
-      .select("full_name")
+      .select("full_name, xp, level, streak")
       .eq("id", user.id)
       .maybeSingle()
-      .then(({ data }) => setName(data?.full_name?.split(" ")[0] ?? ""));
+      .then(({ data }) => {
+        setName(data?.full_name?.split(" ")[0] ?? "");
+        if (data) setStats({ xp: data.xp, level: data.level, streak: data.streak });
+      });
   }, [user]);
 
   return (
-    <div className="px-4 py-6">
-      <header className="mb-6">
+    <div className="space-y-4 px-4 py-6">
+      <header>
         <p className="text-sm text-muted-foreground">Welcome back</p>
-        <h1 className="text-2xl font-bold text-primary">
-          Hi{name ? `, ${name}` : ""} 👋
-        </h1>
+        <div className="flex items-end justify-between gap-2">
+          <h1 className="text-2xl font-bold text-primary">
+            Hi{name ? `, ${name}` : ""} 👋
+          </h1>
+          {stats && (
+            <div className="flex items-center gap-1.5">
+              <Badge className={`gap-1 ${levelColor(stats.level)}`} variant="secondary">
+                <Star className="h-3 w-3" /> {stats.level}
+              </Badge>
+              <Badge variant="secondary" className="gap-1">
+                <Flame className="h-3 w-3 text-orange-500" /> {stats.streak}
+              </Badge>
+            </div>
+          )}
+        </div>
+        {stats && (
+          <p className="mt-1 text-xs text-muted-foreground">
+            {stats.xp} XP total
+          </p>
+        )}
       </header>
+
+      <QuestsCard />
+      <LeaderboardCard />
+
       <Link to="/feed">
         <Card className="shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5">
           <CardHeader className="pb-2">
@@ -46,7 +75,7 @@ function HomePage() {
           </CardContent>
         </Card>
       </Link>
-      <Card className="mt-4 border-dashed bg-card shadow-[var(--shadow-card)]">
+      <Card className="border-dashed bg-card shadow-[var(--shadow-card)]">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <Sparkles className="h-5 w-5 text-accent" />

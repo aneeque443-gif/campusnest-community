@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Plus, X, Eye, Heart, PlayCircle, ListVideo } from "lucide-react";
+import { useLecVaultBrowseTracker } from "@/lib/gamification";
 
 const YEARS = ["FYIT", "SYIT", "TYIT"] as const;
 const BRANCHES = ["IT", "CS", "EXTC", "Mechanical"] as const;
@@ -54,6 +55,7 @@ export function LecturesView({
   defaultBranch: string;
 }) {
   const { isTeacher } = useRoles();
+  useLecVaultBrowseTracker();
   const [yearFilter, setYearFilter] = useState(defaultYear);
   const [branchFilter, setBranchFilter] = useState(defaultBranch);
   const [subjectFilter, setSubjectFilter] = useState("");
