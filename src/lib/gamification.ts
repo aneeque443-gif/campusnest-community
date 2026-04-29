@@ -115,7 +115,8 @@ export function useWeeklyLeaderboard(scope: "class" | "college", year?: string, 
         .order("week_xp", { ascending: false })
         .limit(10);
       if (scope === "class" && year && branch) {
-        q = q.eq("year", year).eq("branch", branch);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        q = q.eq("year", year as any).eq("branch", branch as any);
       }
       const { data } = await q;
       if (!cancelled) {
