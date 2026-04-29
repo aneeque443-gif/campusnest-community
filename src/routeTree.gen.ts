@@ -15,6 +15,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRoomsRouteImport } from './routes/_app.rooms'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
+import { Route as AppNoticesRouteImport } from './routes/_app.notices'
 import { Route as AppNotesRouteImport } from './routes/_app.notes'
 import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppGigsRouteImport } from './routes/_app.gigs'
@@ -55,6 +56,11 @@ const AppRoomsRoute = AppRoomsRouteImport.update({
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNoticesRoute = AppNoticesRouteImport.update({
+  id: '/notices',
+  path: '/notices',
   getParentRoute: () => AppRoute,
 } as any)
 const AppNotesRoute = AppNotesRouteImport.update({
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
+  '/notices': typeof AppNoticesRoute
   '/profile': typeof AppProfileRoute
   '/rooms': typeof AppRoomsRouteWithChildren
   '/chat/$roomId': typeof AppChatRoomIdRoute
@@ -145,6 +152,7 @@ export interface FileRoutesByTo {
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
+  '/notices': typeof AppNoticesRoute
   '/profile': typeof AppProfileRoute
   '/rooms': typeof AppRoomsRouteWithChildren
   '/chat/$roomId': typeof AppChatRoomIdRoute
@@ -166,6 +174,7 @@ export interface FileRoutesById {
   '/_app/gigs': typeof AppGigsRoute
   '/_app/home': typeof AppHomeRoute
   '/_app/notes': typeof AppNotesRouteWithChildren
+  '/_app/notices': typeof AppNoticesRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/rooms': typeof AppRoomsRouteWithChildren
   '/_app/chat/$roomId': typeof AppChatRoomIdRoute
@@ -187,6 +196,7 @@ export interface FileRouteTypes {
     | '/gigs'
     | '/home'
     | '/notes'
+    | '/notices'
     | '/profile'
     | '/rooms'
     | '/chat/$roomId'
@@ -206,6 +216,7 @@ export interface FileRouteTypes {
     | '/gigs'
     | '/home'
     | '/notes'
+    | '/notices'
     | '/profile'
     | '/rooms'
     | '/chat/$roomId'
@@ -226,6 +237,7 @@ export interface FileRouteTypes {
     | '/_app/gigs'
     | '/_app/home'
     | '/_app/notes'
+    | '/_app/notices'
     | '/_app/profile'
     | '/_app/rooms'
     | '/_app/chat/$roomId'
@@ -287,6 +299,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/notices': {
+      id: '/_app/notices'
+      path: '/notices'
+      fullPath: '/notices'
+      preLoaderRoute: typeof AppNoticesRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/notes': {
@@ -420,6 +439,7 @@ interface AppRouteChildren {
   AppGigsRoute: typeof AppGigsRoute
   AppHomeRoute: typeof AppHomeRoute
   AppNotesRoute: typeof AppNotesRouteWithChildren
+  AppNoticesRoute: typeof AppNoticesRoute
   AppProfileRoute: typeof AppProfileRoute
   AppRoomsRoute: typeof AppRoomsRouteWithChildren
   AppChatRoomIdRoute: typeof AppChatRoomIdRoute
@@ -432,6 +452,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppGigsRoute: AppGigsRoute,
   AppHomeRoute: AppHomeRoute,
   AppNotesRoute: AppNotesRouteWithChildren,
+  AppNoticesRoute: AppNoticesRoute,
   AppProfileRoute: AppProfileRoute,
   AppRoomsRoute: AppRoomsRouteWithChildren,
   AppChatRoomIdRoute: AppChatRoomIdRoute,
