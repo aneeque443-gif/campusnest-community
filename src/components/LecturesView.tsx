@@ -55,6 +55,7 @@ export function LecturesView({
   defaultBranch: string;
 }) {
   const { isTeacher } = useRoles();
+  useLecVaultBrowseTracker();
   const [yearFilter, setYearFilter] = useState(defaultYear);
   const [branchFilter, setBranchFilter] = useState(defaultBranch);
   const [subjectFilter, setSubjectFilter] = useState("");
