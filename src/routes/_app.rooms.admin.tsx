@@ -21,7 +21,6 @@ type Booking = {
   user_id: string;
   status: string;
   study_rooms: { name: string } | null;
-  profiles: { full_name: string } | null;
 };
 
 export const Route = createFileRoute("/_app/rooms/admin")({
@@ -33,6 +32,7 @@ function RoomsAdmin() {
   const { isAdmin, loading: roleLoading } = useRoles();
   const [rooms, setRooms] = useState<Room[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [names, setNames] = useState<Record<string, string>>({});
   const [name, setName] = useState("");
   const [capacity, setCapacity] = useState(4);
   const [location, setLocation] = useState("");
@@ -46,11 +46,19 @@ function RoomsAdmin() {
     setRooms((rs ?? []) as Room[]);
     const { data: bs } = await supabase
       .from("study_room_bookings")
-      .select("id, booking_date, slot, purpose, user_id, status, study_rooms(name), profiles!study_room_bookings_user_id_fkey(full_name)")
+      .select("id, booking_date, slot, purpose, user_id, status, study_rooms(name)")
       .gte("booking_date", new Date().toISOString().slice(0, 10))
       .order("booking_date")
       .limit(100);
-    setBookings((bs ?? []) as unknown as Booking[]);
+    const list = (bs ?? []) as unknown as Booking[];
+    setBookings(list);
+    const ids = Array.from(new Set(list.map((b) => b.user_id)));
+    if (ids.length) {
+      const { data: ps } = await supabase.from("profiles").select("id, full_name").in("id", ids);
+      const map: Record<string, string> = {};
+      (ps ?? []).forEach((p: { id: string; full_name: string }) => { map[p.id] = p.full_name; });
+      setNames(map);
+    }
   }
 
   useEffect(() => {
@@ -133,7 +141,7 @@ function RoomsAdmin() {
             <div key={b.id} className="flex items-center justify-between gap-2 rounded-md bg-muted px-3 py-2">
               <div className="min-w-0 text-xs">
                 <p className="font-semibold text-foreground truncate">{b.study_rooms?.name} · {SLOTS.find((s) => s.key === b.slot)?.label}</p>
-                <p className="text-muted-foreground">{format(new Date(`${b.booking_date}T00:00:00`), "PP")} · {b.profiles?.full_name ?? "—"}</p>
+                <p className="text-muted-foreground">{format(new Date(`${b.booking_date}T00:00:00`), "PP")} · {names[b.user_id] ?? "—"}</p>
                 {b.purpose && <p className="truncate text-muted-foreground">{b.purpose}</p>}
               </div>
               {b.status === "confirmed" ? (
