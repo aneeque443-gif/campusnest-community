@@ -661,6 +661,33 @@ export type Database = {
         }
         Relationships: []
       }
+      friend_requests: {
+        Row: {
+          addressee_id: string
+          created_at: string
+          id: string
+          requester_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          addressee_id: string
+          created_at?: string
+          id?: string
+          requester_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          addressee_id?: string
+          created_at?: string
+          id?: string
+          requester_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       lecture_comments: {
         Row: {
           content: string
@@ -1431,6 +1458,7 @@ export type Database = {
       }
     }
     Functions: {
+      are_friends: { Args: { _a: string; _b: string }; Returns: boolean }
       bump_lecvault_browse: { Args: { _minutes: number }; Returns: undefined }
       bump_quest: {
         Args: { _by?: number; _quest_key: string; _user_id: string }

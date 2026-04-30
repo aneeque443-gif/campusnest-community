@@ -138,6 +138,16 @@ export async function markRoomRead(roomId: string, userId: string) {
 /** Open or create a DM room+thread with another user. Returns room id. */
 export async function openDirectMessage(myId: string, otherId: string): Promise<string> {
   if (myId === otherId) throw new Error("Cannot DM yourself");
+  // Require an accepted friendship before allowing DM creation
+  const { data: friend } = await supabase
+    .from("friend_requests")
+    .select("id")
+    .eq("status", "accepted")
+    .or(
+      `and(requester_id.eq.${myId},addressee_id.eq.${otherId}),and(requester_id.eq.${otherId},addressee_id.eq.${myId})`,
+    )
+    .maybeSingle();
+  if (!friend) throw new Error("You must be friends to message this person");
   const [a, b] = [myId, otherId].sort();
   const { data: existing } = await supabase
     .from("direct_message_threads")

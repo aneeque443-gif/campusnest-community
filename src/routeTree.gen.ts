@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRoomsRouteImport } from './routes/_app.rooms'
@@ -19,6 +21,7 @@ import { Route as AppNoticesRouteImport } from './routes/_app.notices'
 import { Route as AppNotesRouteImport } from './routes/_app.notes'
 import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppGigsRouteImport } from './routes/_app.gigs'
+import { Route as AppFriendsRouteImport } from './routes/_app.friends'
 import { Route as AppFeedRouteImport } from './routes/_app.feed'
 import { Route as AppChatIndexRouteImport } from './routes/_app.chat.index'
 import { Route as AppRoomsMineRouteImport } from './routes/_app.rooms.mine'
@@ -35,9 +38,19 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -77,6 +90,11 @@ const AppHomeRoute = AppHomeRouteImport.update({
 const AppGigsRoute = AppGigsRouteImport.update({
   id: '/gigs',
   path: '/gigs',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFriendsRoute = AppFriendsRouteImport.update({
+  id: '/friends',
+  path: '/friends',
   getParentRoute: () => AppRoute,
 } as any)
 const AppFeedRoute = AppFeedRouteImport.update({
@@ -132,9 +150,12 @@ const AppChatRoomIdRoute = AppChatRoomIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/feed': typeof AppFeedRouteWithChildren
+  '/friends': typeof AppFriendsRoute
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
@@ -153,9 +174,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/feed': typeof AppFeedRouteWithChildren
+  '/friends': typeof AppFriendsRoute
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
@@ -176,9 +200,12 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/_app/feed': typeof AppFeedRouteWithChildren
+  '/_app/friends': typeof AppFriendsRoute
   '/_app/gigs': typeof AppGigsRoute
   '/_app/home': typeof AppHomeRoute
   '/_app/notes': typeof AppNotesRouteWithChildren
@@ -199,9 +226,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/forgot-password'
     | '/login'
+    | '/reset-password'
     | '/signup'
     | '/feed'
+    | '/friends'
     | '/gigs'
     | '/home'
     | '/notes'
@@ -220,9 +250,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/forgot-password'
     | '/login'
+    | '/reset-password'
     | '/signup'
     | '/feed'
+    | '/friends'
     | '/gigs'
     | '/home'
     | '/notes'
@@ -242,9 +275,12 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_app'
+    | '/forgot-password'
     | '/login'
+    | '/reset-password'
     | '/signup'
     | '/_app/feed'
+    | '/_app/friends'
     | '/_app/gigs'
     | '/_app/home'
     | '/_app/notes'
@@ -265,7 +301,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
 }
 
@@ -278,11 +316,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app': {
@@ -339,6 +391,13 @@ declare module '@tanstack/react-router' {
       path: '/gigs'
       fullPath: '/gigs'
       preLoaderRoute: typeof AppGigsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/friends': {
+      id: '/_app/friends'
+      path: '/friends'
+      fullPath: '/friends'
+      preLoaderRoute: typeof AppFriendsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/feed': {
@@ -467,6 +526,7 @@ const AppRoomsRouteWithChildren = AppRoomsRoute._addFileChildren(
 
 interface AppRouteChildren {
   AppFeedRoute: typeof AppFeedRouteWithChildren
+  AppFriendsRoute: typeof AppFriendsRoute
   AppGigsRoute: typeof AppGigsRoute
   AppHomeRoute: typeof AppHomeRoute
   AppNotesRoute: typeof AppNotesRouteWithChildren
@@ -480,6 +540,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppFeedRoute: AppFeedRouteWithChildren,
+  AppFriendsRoute: AppFriendsRoute,
   AppGigsRoute: AppGigsRoute,
   AppHomeRoute: AppHomeRoute,
   AppNotesRoute: AppNotesRouteWithChildren,
@@ -496,7 +557,9 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
