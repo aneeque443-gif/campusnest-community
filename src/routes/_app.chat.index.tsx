@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Hash, Users, MessageSquare, Megaphone, Plus } from "lucide-react";
+import { Hash, Users, MessageSquare, Megaphone, Plus, UserPlus } from "lucide-react";
 import { NewDmDialog } from "@/components/chat/NewDmDialog";
 import { NewGroupDialog } from "@/components/chat/NewGroupDialog";
 
@@ -33,6 +33,11 @@ function ChatIndex() {
       <header className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-primary">Chat</h1>
         <div className="flex gap-2">
+          <Link to="/friends">
+            <Button size="sm" variant="outline">
+              <UserPlus className="mr-1 h-4 w-4" /> Friends
+            </Button>
+          </Link>
           <Button size="sm" variant="outline" onClick={() => setDmOpen(true)}>
             <MessageSquare className="mr-1 h-4 w-4" /> DM
           </Button>
@@ -74,7 +79,16 @@ function ChatIndex() {
 
         <TabsContent value="dms" className="space-y-2">
           {dms.length === 0 && (
-            <p className="text-sm text-muted-foreground">No direct messages yet. Start one above.</p>
+            <div className="rounded-lg border border-dashed p-4 text-center">
+              <p className="text-sm text-muted-foreground">
+                No direct messages yet. Add friends first — you can only DM people who are your friends.
+              </p>
+              <Link to="/friends">
+                <Button size="sm" className="mt-2">
+                  <UserPlus className="mr-1 h-4 w-4" /> Find friends
+                </Button>
+              </Link>
+            </div>
           )}
           {dms.map((r) => (
             <button
