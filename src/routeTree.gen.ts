@@ -21,6 +21,7 @@ import { Route as AppNoticesRouteImport } from './routes/_app.notices'
 import { Route as AppNotesRouteImport } from './routes/_app.notes'
 import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppGigsRouteImport } from './routes/_app.gigs'
+import { Route as AppFriendsRouteImport } from './routes/_app.friends'
 import { Route as AppFeedRouteImport } from './routes/_app.feed'
 import { Route as AppChatIndexRouteImport } from './routes/_app.chat.index'
 import { Route as AppRoomsMineRouteImport } from './routes/_app.rooms.mine'
@@ -91,6 +92,11 @@ const AppGigsRoute = AppGigsRouteImport.update({
   path: '/gigs',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFriendsRoute = AppFriendsRouteImport.update({
+  id: '/friends',
+  path: '/friends',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFeedRoute = AppFeedRouteImport.update({
   id: '/feed',
   path: '/feed',
@@ -149,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/feed': typeof AppFeedRouteWithChildren
+  '/friends': typeof AppFriendsRoute
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
@@ -172,6 +179,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/feed': typeof AppFeedRouteWithChildren
+  '/friends': typeof AppFriendsRoute
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
   '/notes': typeof AppNotesRouteWithChildren
@@ -197,6 +205,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/_app/feed': typeof AppFeedRouteWithChildren
+  '/_app/friends': typeof AppFriendsRoute
   '/_app/gigs': typeof AppGigsRoute
   '/_app/home': typeof AppHomeRoute
   '/_app/notes': typeof AppNotesRouteWithChildren
@@ -222,6 +231,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/feed'
+    | '/friends'
     | '/gigs'
     | '/home'
     | '/notes'
@@ -245,6 +255,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/feed'
+    | '/friends'
     | '/gigs'
     | '/home'
     | '/notes'
@@ -269,6 +280,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/_app/feed'
+    | '/_app/friends'
     | '/_app/gigs'
     | '/_app/home'
     | '/_app/notes'
@@ -379,6 +391,13 @@ declare module '@tanstack/react-router' {
       path: '/gigs'
       fullPath: '/gigs'
       preLoaderRoute: typeof AppGigsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/friends': {
+      id: '/_app/friends'
+      path: '/friends'
+      fullPath: '/friends'
+      preLoaderRoute: typeof AppFriendsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/feed': {
@@ -507,6 +526,7 @@ const AppRoomsRouteWithChildren = AppRoomsRoute._addFileChildren(
 
 interface AppRouteChildren {
   AppFeedRoute: typeof AppFeedRouteWithChildren
+  AppFriendsRoute: typeof AppFriendsRoute
   AppGigsRoute: typeof AppGigsRoute
   AppHomeRoute: typeof AppHomeRoute
   AppNotesRoute: typeof AppNotesRouteWithChildren
@@ -520,6 +540,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppFeedRoute: AppFeedRouteWithChildren,
+  AppFriendsRoute: AppFriendsRoute,
   AppGigsRoute: AppGigsRoute,
   AppHomeRoute: AppHomeRoute,
   AppNotesRoute: AppNotesRouteWithChildren,
