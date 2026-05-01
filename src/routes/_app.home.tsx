@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "@tanstack/react-router";
-import { Newspaper, Sparkles, Flame, Star, DoorOpen, Megaphone } from "lucide-react";
+import { Newspaper, Sparkles, Flame, Star, DoorOpen, Megaphone, BookOpen } from "lucide-react";
 import { QuestsCard } from "@/components/gamification/QuestsCard";
 import { LeaderboardCard } from "@/components/gamification/LeaderboardCard";
 import { Badge } from "@/components/ui/badge";
@@ -88,6 +88,19 @@ function HomePage() {
           </Card>
         </Link>
       </div>
+
+      <Link to="/library">
+        <Card className="shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <BookOpen className="h-5 w-5 text-accent" /> Library
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-xs text-muted-foreground">Browse the catalog or borrow from peers.</p>
+          </CardContent>
+        </Card>
+      </Link>
 
       <Link to="/feed">
         <Card className="shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5">
