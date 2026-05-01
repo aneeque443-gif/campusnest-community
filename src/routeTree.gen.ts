@@ -19,6 +19,7 @@ import { Route as AppRoomsRouteImport } from './routes/_app.rooms'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppNoticesRouteImport } from './routes/_app.notices'
 import { Route as AppNotesRouteImport } from './routes/_app.notes'
+import { Route as AppLibraryRouteImport } from './routes/_app.library'
 import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppGigsRouteImport } from './routes/_app.gigs'
 import { Route as AppFriendsRouteImport } from './routes/_app.friends'
@@ -28,10 +29,15 @@ import { Route as AppRoomsMineRouteImport } from './routes/_app.rooms.mine'
 import { Route as AppRoomsAdminRouteImport } from './routes/_app.rooms.admin'
 import { Route as AppNoticesAdminRouteImport } from './routes/_app.notices.admin'
 import { Route as AppNotesNoteIdRouteImport } from './routes/_app.notes.$noteId'
+import { Route as AppLibraryNotificationsRouteImport } from './routes/_app.library.notifications'
+import { Route as AppLibraryAdminRouteImport } from './routes/_app.library.admin'
 import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures.$lectureId'
 import { Route as AppFeedAdminRouteImport } from './routes/_app.feed.admin'
 import { Route as AppFeedPostIdRouteImport } from './routes/_app.feed.$postId'
 import { Route as AppChatRoomIdRouteImport } from './routes/_app.chat.$roomId'
+import { Route as AppLibraryPeerNewRouteImport } from './routes/_app.library.peer.new'
+import { Route as AppLibraryPeerListingIdRouteImport } from './routes/_app.library.peer.$listingId'
+import { Route as AppLibraryBookBookIdRouteImport } from './routes/_app.library.book.$bookId'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -82,6 +88,11 @@ const AppNotesRoute = AppNotesRouteImport.update({
   path: '/notes',
   getParentRoute: () => AppRoute,
 } as any)
+const AppLibraryRoute = AppLibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppHomeRoute = AppHomeRouteImport.update({
   id: '/home',
   path: '/home',
@@ -127,6 +138,16 @@ const AppNotesNoteIdRoute = AppNotesNoteIdRouteImport.update({
   path: '/$noteId',
   getParentRoute: () => AppNotesRoute,
 } as any)
+const AppLibraryNotificationsRoute = AppLibraryNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppLibraryAdminRoute = AppLibraryAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
 const AppLecturesLectureIdRoute = AppLecturesLectureIdRouteImport.update({
   id: '/lectures/$lectureId',
   path: '/lectures/$lectureId',
@@ -147,6 +168,21 @@ const AppChatRoomIdRoute = AppChatRoomIdRouteImport.update({
   path: '/chat/$roomId',
   getParentRoute: () => AppRoute,
 } as any)
+const AppLibraryPeerNewRoute = AppLibraryPeerNewRouteImport.update({
+  id: '/peer/new',
+  path: '/peer/new',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppLibraryPeerListingIdRoute = AppLibraryPeerListingIdRouteImport.update({
+  id: '/peer/$listingId',
+  path: '/peer/$listingId',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppLibraryBookBookIdRoute = AppLibraryBookBookIdRouteImport.update({
+  id: '/book/$bookId',
+  path: '/book/$bookId',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -158,6 +194,7 @@ export interface FileRoutesByFullPath {
   '/friends': typeof AppFriendsRoute
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
+  '/library': typeof AppLibraryRouteWithChildren
   '/notes': typeof AppNotesRouteWithChildren
   '/notices': typeof AppNoticesRouteWithChildren
   '/profile': typeof AppProfileRoute
@@ -166,11 +203,16 @@ export interface FileRoutesByFullPath {
   '/feed/$postId': typeof AppFeedPostIdRoute
   '/feed/admin': typeof AppFeedAdminRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
+  '/library/admin': typeof AppLibraryAdminRoute
+  '/library/notifications': typeof AppLibraryNotificationsRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
   '/notices/admin': typeof AppNoticesAdminRoute
   '/rooms/admin': typeof AppRoomsAdminRoute
   '/rooms/mine': typeof AppRoomsMineRoute
   '/chat/': typeof AppChatIndexRoute
+  '/library/book/$bookId': typeof AppLibraryBookBookIdRoute
+  '/library/peer/$listingId': typeof AppLibraryPeerListingIdRoute
+  '/library/peer/new': typeof AppLibraryPeerNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -182,6 +224,7 @@ export interface FileRoutesByTo {
   '/friends': typeof AppFriendsRoute
   '/gigs': typeof AppGigsRoute
   '/home': typeof AppHomeRoute
+  '/library': typeof AppLibraryRouteWithChildren
   '/notes': typeof AppNotesRouteWithChildren
   '/notices': typeof AppNoticesRouteWithChildren
   '/profile': typeof AppProfileRoute
@@ -190,11 +233,16 @@ export interface FileRoutesByTo {
   '/feed/$postId': typeof AppFeedPostIdRoute
   '/feed/admin': typeof AppFeedAdminRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
+  '/library/admin': typeof AppLibraryAdminRoute
+  '/library/notifications': typeof AppLibraryNotificationsRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
   '/notices/admin': typeof AppNoticesAdminRoute
   '/rooms/admin': typeof AppRoomsAdminRoute
   '/rooms/mine': typeof AppRoomsMineRoute
   '/chat': typeof AppChatIndexRoute
+  '/library/book/$bookId': typeof AppLibraryBookBookIdRoute
+  '/library/peer/$listingId': typeof AppLibraryPeerListingIdRoute
+  '/library/peer/new': typeof AppLibraryPeerNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -208,6 +256,7 @@ export interface FileRoutesById {
   '/_app/friends': typeof AppFriendsRoute
   '/_app/gigs': typeof AppGigsRoute
   '/_app/home': typeof AppHomeRoute
+  '/_app/library': typeof AppLibraryRouteWithChildren
   '/_app/notes': typeof AppNotesRouteWithChildren
   '/_app/notices': typeof AppNoticesRouteWithChildren
   '/_app/profile': typeof AppProfileRoute
@@ -216,11 +265,16 @@ export interface FileRoutesById {
   '/_app/feed/$postId': typeof AppFeedPostIdRoute
   '/_app/feed/admin': typeof AppFeedAdminRoute
   '/_app/lectures/$lectureId': typeof AppLecturesLectureIdRoute
+  '/_app/library/admin': typeof AppLibraryAdminRoute
+  '/_app/library/notifications': typeof AppLibraryNotificationsRoute
   '/_app/notes/$noteId': typeof AppNotesNoteIdRoute
   '/_app/notices/admin': typeof AppNoticesAdminRoute
   '/_app/rooms/admin': typeof AppRoomsAdminRoute
   '/_app/rooms/mine': typeof AppRoomsMineRoute
   '/_app/chat/': typeof AppChatIndexRoute
+  '/_app/library/book/$bookId': typeof AppLibraryBookBookIdRoute
+  '/_app/library/peer/$listingId': typeof AppLibraryPeerListingIdRoute
+  '/_app/library/peer/new': typeof AppLibraryPeerNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -234,6 +288,7 @@ export interface FileRouteTypes {
     | '/friends'
     | '/gigs'
     | '/home'
+    | '/library'
     | '/notes'
     | '/notices'
     | '/profile'
@@ -242,11 +297,16 @@ export interface FileRouteTypes {
     | '/feed/$postId'
     | '/feed/admin'
     | '/lectures/$lectureId'
+    | '/library/admin'
+    | '/library/notifications'
     | '/notes/$noteId'
     | '/notices/admin'
     | '/rooms/admin'
     | '/rooms/mine'
     | '/chat/'
+    | '/library/book/$bookId'
+    | '/library/peer/$listingId'
+    | '/library/peer/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -258,6 +318,7 @@ export interface FileRouteTypes {
     | '/friends'
     | '/gigs'
     | '/home'
+    | '/library'
     | '/notes'
     | '/notices'
     | '/profile'
@@ -266,11 +327,16 @@ export interface FileRouteTypes {
     | '/feed/$postId'
     | '/feed/admin'
     | '/lectures/$lectureId'
+    | '/library/admin'
+    | '/library/notifications'
     | '/notes/$noteId'
     | '/notices/admin'
     | '/rooms/admin'
     | '/rooms/mine'
     | '/chat'
+    | '/library/book/$bookId'
+    | '/library/peer/$listingId'
+    | '/library/peer/new'
   id:
     | '__root__'
     | '/'
@@ -283,6 +349,7 @@ export interface FileRouteTypes {
     | '/_app/friends'
     | '/_app/gigs'
     | '/_app/home'
+    | '/_app/library'
     | '/_app/notes'
     | '/_app/notices'
     | '/_app/profile'
@@ -291,11 +358,16 @@ export interface FileRouteTypes {
     | '/_app/feed/$postId'
     | '/_app/feed/admin'
     | '/_app/lectures/$lectureId'
+    | '/_app/library/admin'
+    | '/_app/library/notifications'
     | '/_app/notes/$noteId'
     | '/_app/notices/admin'
     | '/_app/rooms/admin'
     | '/_app/rooms/mine'
     | '/_app/chat/'
+    | '/_app/library/book/$bookId'
+    | '/_app/library/peer/$listingId'
+    | '/_app/library/peer/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -379,6 +451,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppNotesRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/library': {
+      id: '/_app/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof AppLibraryRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/home': {
       id: '/_app/home'
       path: '/home'
@@ -442,6 +521,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppNotesNoteIdRouteImport
       parentRoute: typeof AppNotesRoute
     }
+    '/_app/library/notifications': {
+      id: '/_app/library/notifications'
+      path: '/notifications'
+      fullPath: '/library/notifications'
+      preLoaderRoute: typeof AppLibraryNotificationsRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/_app/library/admin': {
+      id: '/_app/library/admin'
+      path: '/admin'
+      fullPath: '/library/admin'
+      preLoaderRoute: typeof AppLibraryAdminRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
     '/_app/lectures/$lectureId': {
       id: '/_app/lectures/$lectureId'
       path: '/lectures/$lectureId'
@@ -470,6 +563,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppChatRoomIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/library/peer/new': {
+      id: '/_app/library/peer/new'
+      path: '/peer/new'
+      fullPath: '/library/peer/new'
+      preLoaderRoute: typeof AppLibraryPeerNewRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/_app/library/peer/$listingId': {
+      id: '/_app/library/peer/$listingId'
+      path: '/peer/$listingId'
+      fullPath: '/library/peer/$listingId'
+      preLoaderRoute: typeof AppLibraryPeerListingIdRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/_app/library/book/$bookId': {
+      id: '/_app/library/book/$bookId'
+      path: '/book/$bookId'
+      fullPath: '/library/book/$bookId'
+      preLoaderRoute: typeof AppLibraryBookBookIdRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
   }
 }
 
@@ -485,6 +599,26 @@ const AppFeedRouteChildren: AppFeedRouteChildren = {
 
 const AppFeedRouteWithChildren =
   AppFeedRoute._addFileChildren(AppFeedRouteChildren)
+
+interface AppLibraryRouteChildren {
+  AppLibraryAdminRoute: typeof AppLibraryAdminRoute
+  AppLibraryNotificationsRoute: typeof AppLibraryNotificationsRoute
+  AppLibraryBookBookIdRoute: typeof AppLibraryBookBookIdRoute
+  AppLibraryPeerListingIdRoute: typeof AppLibraryPeerListingIdRoute
+  AppLibraryPeerNewRoute: typeof AppLibraryPeerNewRoute
+}
+
+const AppLibraryRouteChildren: AppLibraryRouteChildren = {
+  AppLibraryAdminRoute: AppLibraryAdminRoute,
+  AppLibraryNotificationsRoute: AppLibraryNotificationsRoute,
+  AppLibraryBookBookIdRoute: AppLibraryBookBookIdRoute,
+  AppLibraryPeerListingIdRoute: AppLibraryPeerListingIdRoute,
+  AppLibraryPeerNewRoute: AppLibraryPeerNewRoute,
+}
+
+const AppLibraryRouteWithChildren = AppLibraryRoute._addFileChildren(
+  AppLibraryRouteChildren,
+)
 
 interface AppNotesRouteChildren {
   AppNotesNoteIdRoute: typeof AppNotesNoteIdRoute
@@ -529,6 +663,7 @@ interface AppRouteChildren {
   AppFriendsRoute: typeof AppFriendsRoute
   AppGigsRoute: typeof AppGigsRoute
   AppHomeRoute: typeof AppHomeRoute
+  AppLibraryRoute: typeof AppLibraryRouteWithChildren
   AppNotesRoute: typeof AppNotesRouteWithChildren
   AppNoticesRoute: typeof AppNoticesRouteWithChildren
   AppProfileRoute: typeof AppProfileRoute
@@ -543,6 +678,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppFriendsRoute: AppFriendsRoute,
   AppGigsRoute: AppGigsRoute,
   AppHomeRoute: AppHomeRoute,
+  AppLibraryRoute: AppLibraryRouteWithChildren,
   AppNotesRoute: AppNotesRouteWithChildren,
   AppNoticesRoute: AppNoticesRouteWithChildren,
   AppProfileRoute: AppProfileRoute,
