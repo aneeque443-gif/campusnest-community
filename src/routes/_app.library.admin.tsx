@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { uploadBookCover } from "@/lib/library";
+import { uploadBookCover, type BorrowStatus } from "@/lib/library";
 
 type Book = {
   id: string; title: string; author: string; subject: string; year: string | null;
@@ -168,7 +168,7 @@ function LoansList() {
   }
   useEffect(() => { load(); }, []);
 
-  async function setStatus(id: string, status: string) {
+  async function setStatus(id: string, status: BorrowStatus) {
     const { error } = await supabase.from("library_borrow_requests").update({ status }).eq("id", id);
     if (error) return toast.error(error.message);
     toast.success("Updated");
