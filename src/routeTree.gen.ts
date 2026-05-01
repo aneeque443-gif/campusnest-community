@@ -35,6 +35,8 @@ import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures
 import { Route as AppFeedAdminRouteImport } from './routes/_app.feed.admin'
 import { Route as AppFeedPostIdRouteImport } from './routes/_app.feed.$postId'
 import { Route as AppChatRoomIdRouteImport } from './routes/_app.chat.$roomId'
+import { Route as AppLibraryPeerNewRouteImport } from './routes/_app.library.peer.new'
+import { Route as AppLibraryPeerListingIdRouteImport } from './routes/_app.library.peer.$listingId'
 import { Route as AppLibraryBookBookIdRouteImport } from './routes/_app.library.book.$bookId'
 
 const SignupRoute = SignupRouteImport.update({
@@ -166,6 +168,16 @@ const AppChatRoomIdRoute = AppChatRoomIdRouteImport.update({
   path: '/chat/$roomId',
   getParentRoute: () => AppRoute,
 } as any)
+const AppLibraryPeerNewRoute = AppLibraryPeerNewRouteImport.update({
+  id: '/peer/new',
+  path: '/peer/new',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppLibraryPeerListingIdRoute = AppLibraryPeerListingIdRouteImport.update({
+  id: '/peer/$listingId',
+  path: '/peer/$listingId',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
 const AppLibraryBookBookIdRoute = AppLibraryBookBookIdRouteImport.update({
   id: '/book/$bookId',
   path: '/book/$bookId',
@@ -199,6 +211,8 @@ export interface FileRoutesByFullPath {
   '/rooms/mine': typeof AppRoomsMineRoute
   '/chat/': typeof AppChatIndexRoute
   '/library/book/$bookId': typeof AppLibraryBookBookIdRoute
+  '/library/peer/$listingId': typeof AppLibraryPeerListingIdRoute
+  '/library/peer/new': typeof AppLibraryPeerNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -227,6 +241,8 @@ export interface FileRoutesByTo {
   '/rooms/mine': typeof AppRoomsMineRoute
   '/chat': typeof AppChatIndexRoute
   '/library/book/$bookId': typeof AppLibraryBookBookIdRoute
+  '/library/peer/$listingId': typeof AppLibraryPeerListingIdRoute
+  '/library/peer/new': typeof AppLibraryPeerNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -257,6 +273,8 @@ export interface FileRoutesById {
   '/_app/rooms/mine': typeof AppRoomsMineRoute
   '/_app/chat/': typeof AppChatIndexRoute
   '/_app/library/book/$bookId': typeof AppLibraryBookBookIdRoute
+  '/_app/library/peer/$listingId': typeof AppLibraryPeerListingIdRoute
+  '/_app/library/peer/new': typeof AppLibraryPeerNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -287,6 +305,8 @@ export interface FileRouteTypes {
     | '/rooms/mine'
     | '/chat/'
     | '/library/book/$bookId'
+    | '/library/peer/$listingId'
+    | '/library/peer/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -315,6 +335,8 @@ export interface FileRouteTypes {
     | '/rooms/mine'
     | '/chat'
     | '/library/book/$bookId'
+    | '/library/peer/$listingId'
+    | '/library/peer/new'
   id:
     | '__root__'
     | '/'
@@ -344,6 +366,8 @@ export interface FileRouteTypes {
     | '/_app/rooms/mine'
     | '/_app/chat/'
     | '/_app/library/book/$bookId'
+    | '/_app/library/peer/$listingId'
+    | '/_app/library/peer/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -539,6 +563,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppChatRoomIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/library/peer/new': {
+      id: '/_app/library/peer/new'
+      path: '/peer/new'
+      fullPath: '/library/peer/new'
+      preLoaderRoute: typeof AppLibraryPeerNewRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/_app/library/peer/$listingId': {
+      id: '/_app/library/peer/$listingId'
+      path: '/peer/$listingId'
+      fullPath: '/library/peer/$listingId'
+      preLoaderRoute: typeof AppLibraryPeerListingIdRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
     '/_app/library/book/$bookId': {
       id: '/_app/library/book/$bookId'
       path: '/book/$bookId'
@@ -566,12 +604,16 @@ interface AppLibraryRouteChildren {
   AppLibraryAdminRoute: typeof AppLibraryAdminRoute
   AppLibraryNotificationsRoute: typeof AppLibraryNotificationsRoute
   AppLibraryBookBookIdRoute: typeof AppLibraryBookBookIdRoute
+  AppLibraryPeerListingIdRoute: typeof AppLibraryPeerListingIdRoute
+  AppLibraryPeerNewRoute: typeof AppLibraryPeerNewRoute
 }
 
 const AppLibraryRouteChildren: AppLibraryRouteChildren = {
   AppLibraryAdminRoute: AppLibraryAdminRoute,
   AppLibraryNotificationsRoute: AppLibraryNotificationsRoute,
   AppLibraryBookBookIdRoute: AppLibraryBookBookIdRoute,
+  AppLibraryPeerListingIdRoute: AppLibraryPeerListingIdRoute,
+  AppLibraryPeerNewRoute: AppLibraryPeerNewRoute,
 }
 
 const AppLibraryRouteWithChildren = AppLibraryRoute._addFileChildren(
