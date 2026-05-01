@@ -869,6 +869,181 @@ export type Database = {
           },
         ]
       }
+      library_books: {
+        Row: {
+          author: string
+          available_copies: number
+          cover_url: string | null
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          rating_avg: number
+          rating_count: number
+          subject: string
+          title: string
+          total_copies: number
+          updated_at: string
+          year: string | null
+        }
+        Insert: {
+          author: string
+          available_copies?: number
+          cover_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          rating_avg?: number
+          rating_count?: number
+          subject: string
+          title: string
+          total_copies?: number
+          updated_at?: string
+          year?: string | null
+        }
+        Update: {
+          author?: string
+          available_copies?: number
+          cover_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          rating_avg?: number
+          rating_count?: number
+          subject?: string
+          title?: string
+          total_copies?: number
+          updated_at?: string
+          year?: string | null
+        }
+        Relationships: []
+      }
+      library_borrow_requests: {
+        Row: {
+          approved_at: string | null
+          book_id: string
+          created_at: string
+          due_date: string | null
+          id: string
+          notes: string
+          reminder_sent: boolean
+          requested_at: string
+          returned_at: string | null
+          reviewed_by: string | null
+          status: Database["public"]["Enums"]["borrow_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          approved_at?: string | null
+          book_id: string
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          notes?: string
+          reminder_sent?: boolean
+          requested_at?: string
+          returned_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["borrow_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          approved_at?: string | null
+          book_id?: string
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          notes?: string
+          reminder_sent?: boolean
+          requested_at?: string
+          returned_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["borrow_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "library_borrow_requests_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "library_books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      library_notifications: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          is_read: boolean
+          kind: string
+          link: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          kind: string
+          link?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          kind?: string
+          link?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      library_reviews: {
+        Row: {
+          body: string
+          book_id: string
+          created_at: string
+          id: string
+          rating: number
+          user_id: string
+        }
+        Insert: {
+          body?: string
+          book_id: string
+          created_at?: string
+          id?: string
+          rating: number
+          user_id: string
+        }
+        Update: {
+          body?: string
+          book_id?: string
+          created_at?: string
+          id?: string
+          rating?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "library_reviews_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "library_books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       note_bookmarks: {
         Row: {
           created_at: string
@@ -1075,6 +1250,89 @@ export type Database = {
           urgency?: Database["public"]["Enums"]["notice_urgency"]
         }
         Relationships: []
+      }
+      peer_book_listings: {
+        Row: {
+          author: string
+          condition: Database["public"]["Enums"]["book_condition"]
+          created_at: string
+          duration_days: number
+          id: string
+          notes: string
+          owner_id: string
+          status: Database["public"]["Enums"]["peer_listing_status"]
+          subject: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author: string
+          condition?: Database["public"]["Enums"]["book_condition"]
+          created_at?: string
+          duration_days?: number
+          id?: string
+          notes?: string
+          owner_id: string
+          status?: Database["public"]["Enums"]["peer_listing_status"]
+          subject?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          condition?: Database["public"]["Enums"]["book_condition"]
+          created_at?: string
+          duration_days?: number
+          id?: string
+          notes?: string
+          owner_id?: string
+          status?: Database["public"]["Enums"]["peer_listing_status"]
+          subject?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      peer_book_requests: {
+        Row: {
+          created_at: string
+          id: string
+          listing_id: string
+          message: string
+          owner_id: string
+          requester_id: string
+          status: Database["public"]["Enums"]["peer_request_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          listing_id: string
+          message?: string
+          owner_id: string
+          requester_id: string
+          status?: Database["public"]["Enums"]["peer_request_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          listing_id?: string
+          message?: string
+          owner_id?: string
+          requester_id?: string
+          status?: Database["public"]["Enums"]["peer_request_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peer_book_requests_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "peer_book_listings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -1501,6 +1759,7 @@ export type Database = {
         Returns: undefined
       }
       my_doubt_ids: { Args: never; Returns: string[] }
+      send_library_due_reminders: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role:
@@ -1510,6 +1769,13 @@ export type Database = {
         | "class_rep"
         | "senior_mentor"
         | "reporter"
+      book_condition: "new" | "like_new" | "good" | "fair" | "worn"
+      borrow_status:
+        | "pending"
+        | "approved"
+        | "rejected"
+        | "returned"
+        | "overdue"
       chat_room_kind: "class" | "open" | "study_group" | "dm"
       doubt_category:
         | "academic"
@@ -1525,6 +1791,13 @@ export type Database = {
         | "Event"
         | "General"
       notice_urgency: "Normal" | "Urgent"
+      peer_listing_status: "available" | "lent" | "withdrawn"
+      peer_request_status:
+        | "pending"
+        | "accepted"
+        | "declined"
+        | "returned"
+        | "cancelled"
       room_slot: "9-11" | "11-13" | "14-16" | "16-18"
       senior_question_category:
         | "academic"
@@ -1668,6 +1941,8 @@ export const Constants = {
         "senior_mentor",
         "reporter",
       ],
+      book_condition: ["new", "like_new", "good", "fair", "worn"],
+      borrow_status: ["pending", "approved", "rejected", "returned", "overdue"],
       chat_room_kind: ["class", "open", "study_group", "dm"],
       doubt_category: [
         "academic",
@@ -1685,6 +1960,14 @@ export const Constants = {
         "General",
       ],
       notice_urgency: ["Normal", "Urgent"],
+      peer_listing_status: ["available", "lent", "withdrawn"],
+      peer_request_status: [
+        "pending",
+        "accepted",
+        "declined",
+        "returned",
+        "cancelled",
+      ],
       room_slot: ["9-11", "11-13", "14-16", "16-18"],
       senior_question_category: [
         "academic",
