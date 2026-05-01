@@ -30,6 +30,7 @@ import { Route as AppRoomsAdminRouteImport } from './routes/_app.rooms.admin'
 import { Route as AppNoticesAdminRouteImport } from './routes/_app.notices.admin'
 import { Route as AppNotesNoteIdRouteImport } from './routes/_app.notes.$noteId'
 import { Route as AppLibraryNotificationsRouteImport } from './routes/_app.library.notifications'
+import { Route as AppLibraryAdminRouteImport } from './routes/_app.library.admin'
 import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures.$lectureId'
 import { Route as AppFeedAdminRouteImport } from './routes/_app.feed.admin'
 import { Route as AppFeedPostIdRouteImport } from './routes/_app.feed.$postId'
@@ -140,6 +141,11 @@ const AppLibraryNotificationsRoute = AppLibraryNotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => AppLibraryRoute,
 } as any)
+const AppLibraryAdminRoute = AppLibraryAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
 const AppLecturesLectureIdRoute = AppLecturesLectureIdRouteImport.update({
   id: '/lectures/$lectureId',
   path: '/lectures/$lectureId',
@@ -185,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/feed/$postId': typeof AppFeedPostIdRoute
   '/feed/admin': typeof AppFeedAdminRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
+  '/library/admin': typeof AppLibraryAdminRoute
   '/library/notifications': typeof AppLibraryNotificationsRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
   '/notices/admin': typeof AppNoticesAdminRoute
@@ -212,6 +219,7 @@ export interface FileRoutesByTo {
   '/feed/$postId': typeof AppFeedPostIdRoute
   '/feed/admin': typeof AppFeedAdminRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
+  '/library/admin': typeof AppLibraryAdminRoute
   '/library/notifications': typeof AppLibraryNotificationsRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
   '/notices/admin': typeof AppNoticesAdminRoute
@@ -241,6 +249,7 @@ export interface FileRoutesById {
   '/_app/feed/$postId': typeof AppFeedPostIdRoute
   '/_app/feed/admin': typeof AppFeedAdminRoute
   '/_app/lectures/$lectureId': typeof AppLecturesLectureIdRoute
+  '/_app/library/admin': typeof AppLibraryAdminRoute
   '/_app/library/notifications': typeof AppLibraryNotificationsRoute
   '/_app/notes/$noteId': typeof AppNotesNoteIdRoute
   '/_app/notices/admin': typeof AppNoticesAdminRoute
@@ -270,6 +279,7 @@ export interface FileRouteTypes {
     | '/feed/$postId'
     | '/feed/admin'
     | '/lectures/$lectureId'
+    | '/library/admin'
     | '/library/notifications'
     | '/notes/$noteId'
     | '/notices/admin'
@@ -297,6 +307,7 @@ export interface FileRouteTypes {
     | '/feed/$postId'
     | '/feed/admin'
     | '/lectures/$lectureId'
+    | '/library/admin'
     | '/library/notifications'
     | '/notes/$noteId'
     | '/notices/admin'
@@ -325,6 +336,7 @@ export interface FileRouteTypes {
     | '/_app/feed/$postId'
     | '/_app/feed/admin'
     | '/_app/lectures/$lectureId'
+    | '/_app/library/admin'
     | '/_app/library/notifications'
     | '/_app/notes/$noteId'
     | '/_app/notices/admin'
@@ -492,6 +504,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLibraryNotificationsRouteImport
       parentRoute: typeof AppLibraryRoute
     }
+    '/_app/library/admin': {
+      id: '/_app/library/admin'
+      path: '/admin'
+      fullPath: '/library/admin'
+      preLoaderRoute: typeof AppLibraryAdminRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
     '/_app/lectures/$lectureId': {
       id: '/_app/lectures/$lectureId'
       path: '/lectures/$lectureId'
@@ -544,11 +563,13 @@ const AppFeedRouteWithChildren =
   AppFeedRoute._addFileChildren(AppFeedRouteChildren)
 
 interface AppLibraryRouteChildren {
+  AppLibraryAdminRoute: typeof AppLibraryAdminRoute
   AppLibraryNotificationsRoute: typeof AppLibraryNotificationsRoute
   AppLibraryBookBookIdRoute: typeof AppLibraryBookBookIdRoute
 }
 
 const AppLibraryRouteChildren: AppLibraryRouteChildren = {
+  AppLibraryAdminRoute: AppLibraryAdminRoute,
   AppLibraryNotificationsRoute: AppLibraryNotificationsRoute,
   AppLibraryBookBookIdRoute: AppLibraryBookBookIdRoute,
 }
