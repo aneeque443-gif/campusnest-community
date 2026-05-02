@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "@tanstack/react-router";
-import { Newspaper, Sparkles, Flame, Star, DoorOpen, Megaphone, BookOpen } from "lucide-react";
+import { Newspaper, Flame, Star, DoorOpen, Megaphone, BookOpen, Search } from "lucide-react";
 import { QuestsCard } from "@/components/gamification/QuestsCard";
 import { LeaderboardCard } from "@/components/gamification/LeaderboardCard";
 import { Badge } from "@/components/ui/badge";
@@ -102,6 +102,19 @@ function HomePage() {
         </Card>
       </Link>
 
+      <Link to="/lost-found">
+        <Card className="shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Search className="h-5 w-5 text-accent" /> Lost & Found
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-xs text-muted-foreground">Report lost items or post things you found.</p>
+          </CardContent>
+        </Card>
+      </Link>
+
       <Link to="/feed">
         <Card className="shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5">
           <CardHeader className="pb-2">
@@ -115,19 +128,6 @@ function HomePage() {
           </CardContent>
         </Card>
       </Link>
-      <Card className="border-dashed bg-card shadow-[var(--shadow-card)]">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Sparkles className="h-5 w-5 text-accent" />
-            More coming soon
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            Gigs and more campus features are on the way.
-          </p>
-        </CardContent>
-      </Card>
     </div>
   );
 }

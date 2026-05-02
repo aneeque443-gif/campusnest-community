@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { useRole } from "@/lib/use-role";
+import { useRoles } from "@/lib/use-role";
 import { openDirectMessage } from "@/lib/chat/use-chat";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/_app/lost-found")({
 
 function LostFoundPage() {
   const { user } = useAuth();
-  const { isAdmin } = useRole();
+  const { isAdmin } = useRoles();
   const nav = useNavigate();
   const [items, setItems] = useState<LfItem[]>([]);
   const [posters, setPosters] = useState<Record<string, { full_name: string; photo_url: string | null }>>({});
