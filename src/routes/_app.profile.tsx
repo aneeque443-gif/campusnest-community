@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { BadgesGrid } from "@/components/gamification/BadgesGrid";
+import { GigNestProfileCard } from "@/components/gigs/GigNestProfileCard";
 import { useUserBadges, levelColor } from "@/lib/gamification";
 import {
   Dialog,
@@ -347,6 +348,8 @@ function ProfilePage() {
           )}
         </CardContent>
       </Card>
+
+      <GigNestProfileCard userId={profile.id} />
 
       {reporterStats && (
         <Card className="shadow-[var(--shadow-card)]">
