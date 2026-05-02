@@ -688,6 +688,158 @@ export type Database = {
         }
         Relationships: []
       }
+      gig_orders: {
+        Row: {
+          buyer_id: string
+          completed_at: string | null
+          created_at: string
+          details: string
+          gig_id: string
+          id: string
+          room_id: string | null
+          seller_id: string
+          status: Database["public"]["Enums"]["gig_order_status"]
+          updated_at: string
+        }
+        Insert: {
+          buyer_id: string
+          completed_at?: string | null
+          created_at?: string
+          details?: string
+          gig_id: string
+          id?: string
+          room_id?: string | null
+          seller_id: string
+          status?: Database["public"]["Enums"]["gig_order_status"]
+          updated_at?: string
+        }
+        Update: {
+          buyer_id?: string
+          completed_at?: string | null
+          created_at?: string
+          details?: string
+          gig_id?: string
+          id?: string
+          room_id?: string | null
+          seller_id?: string
+          status?: Database["public"]["Enums"]["gig_order_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gig_orders_gig_id_fkey"
+            columns: ["gig_id"]
+            isOneToOne: false
+            referencedRelation: "gigs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gig_reviews: {
+        Row: {
+          body: string
+          buyer_id: string
+          created_at: string
+          gig_id: string
+          id: string
+          order_id: string
+          rating: number
+          seller_id: string
+        }
+        Insert: {
+          body?: string
+          buyer_id: string
+          created_at?: string
+          gig_id: string
+          id?: string
+          order_id: string
+          rating: number
+          seller_id: string
+        }
+        Update: {
+          body?: string
+          buyer_id?: string
+          created_at?: string
+          gig_id?: string
+          id?: string
+          order_id?: string
+          rating?: number
+          seller_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gig_reviews_gig_id_fkey"
+            columns: ["gig_id"]
+            isOneToOne: false
+            referencedRelation: "gigs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gig_reviews_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "gig_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gigs: {
+        Row: {
+          category: Database["public"]["Enums"]["gig_category"]
+          completed_count: number
+          cover_image: string | null
+          created_at: string
+          delivery_days: number
+          description: string
+          id: string
+          is_active: boolean
+          price_inr: number
+          rating_avg: number
+          rating_count: number
+          sample_images: string[]
+          seller_id: string
+          skill_tags: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["gig_category"]
+          completed_count?: number
+          cover_image?: string | null
+          created_at?: string
+          delivery_days?: number
+          description?: string
+          id?: string
+          is_active?: boolean
+          price_inr?: number
+          rating_avg?: number
+          rating_count?: number
+          sample_images?: string[]
+          seller_id: string
+          skill_tags?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["gig_category"]
+          completed_count?: number
+          cover_image?: string | null
+          created_at?: string
+          delivery_days?: number
+          description?: string
+          id?: string
+          is_active?: boolean
+          price_inr?: number
+          rating_avg?: number
+          rating_count?: number
+          sample_images?: string[]
+          seller_id?: string
+          skill_tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       lecture_comments: {
         Row: {
           content: string
@@ -1043,6 +1195,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      lost_found_items: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          kind: Database["public"]["Enums"]["lost_found_kind"]
+          location: string
+          name: string
+          occurred_on: string | null
+          photo_url: string | null
+          poster_id: string
+          status: Database["public"]["Enums"]["lost_found_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          kind: Database["public"]["Enums"]["lost_found_kind"]
+          location?: string
+          name: string
+          occurred_on?: string | null
+          photo_url?: string | null
+          poster_id: string
+          status?: Database["public"]["Enums"]["lost_found_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["lost_found_kind"]
+          location?: string
+          name?: string
+          occurred_on?: string | null
+          photo_url?: string | null
+          poster_id?: string
+          status?: Database["public"]["Enums"]["lost_found_status"]
+          updated_at?: string
+        }
+        Relationships: []
       }
       note_bookmarks: {
         Row: {
@@ -1784,6 +1978,22 @@ export type Database = {
         | "exam_stress"
         | "career_confusion"
       feed_post_type: "article" | "photo_story" | "event" | "poll"
+      gig_category:
+        | "Design"
+        | "Coding"
+        | "Writing"
+        | "Video"
+        | "Tutoring"
+        | "Photography"
+        | "Other"
+      gig_order_status:
+        | "pending"
+        | "accepted"
+        | "in_progress"
+        | "completed"
+        | "cancelled"
+      lost_found_kind: "lost" | "found"
+      lost_found_status: "open" | "resolved"
       notice_category:
         | "Exam"
         | "Assignment"
@@ -1952,6 +2162,24 @@ export const Constants = {
         "career_confusion",
       ],
       feed_post_type: ["article", "photo_story", "event", "poll"],
+      gig_category: [
+        "Design",
+        "Coding",
+        "Writing",
+        "Video",
+        "Tutoring",
+        "Photography",
+        "Other",
+      ],
+      gig_order_status: [
+        "pending",
+        "accepted",
+        "in_progress",
+        "completed",
+        "cancelled",
+      ],
+      lost_found_kind: ["lost", "found"],
+      lost_found_status: ["open", "resolved"],
       notice_category: [
         "Exam",
         "Assignment",
