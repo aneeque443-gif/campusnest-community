@@ -19,6 +19,7 @@ import { Route as AppRoomsRouteImport } from './routes/_app.rooms'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppNoticesRouteImport } from './routes/_app.notices'
 import { Route as AppNotesRouteImport } from './routes/_app.notes'
+import { Route as AppLostFoundRouteImport } from './routes/_app.lost-found'
 import { Route as AppLibraryRouteImport } from './routes/_app.library'
 import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppGigsRouteImport } from './routes/_app.gigs'
@@ -32,6 +33,7 @@ import { Route as AppNotesNoteIdRouteImport } from './routes/_app.notes.$noteId'
 import { Route as AppLibraryNotificationsRouteImport } from './routes/_app.library.notifications'
 import { Route as AppLibraryAdminRouteImport } from './routes/_app.library.admin'
 import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures.$lectureId'
+import { Route as AppGigsOrdersRouteImport } from './routes/_app.gigs.orders'
 import { Route as AppGigsNewRouteImport } from './routes/_app.gigs.new'
 import { Route as AppGigsGigIdRouteImport } from './routes/_app.gigs.$gigId'
 import { Route as AppFeedAdminRouteImport } from './routes/_app.feed.admin'
@@ -88,6 +90,11 @@ const AppNoticesRoute = AppNoticesRouteImport.update({
 const AppNotesRoute = AppNotesRouteImport.update({
   id: '/notes',
   path: '/notes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLostFoundRoute = AppLostFoundRouteImport.update({
+  id: '/lost-found',
+  path: '/lost-found',
   getParentRoute: () => AppRoute,
 } as any)
 const AppLibraryRoute = AppLibraryRouteImport.update({
@@ -155,6 +162,11 @@ const AppLecturesLectureIdRoute = AppLecturesLectureIdRouteImport.update({
   path: '/lectures/$lectureId',
   getParentRoute: () => AppRoute,
 } as any)
+const AppGigsOrdersRoute = AppGigsOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AppGigsRoute,
+} as any)
 const AppGigsNewRoute = AppGigsNewRouteImport.update({
   id: '/new',
   path: '/new',
@@ -207,6 +219,7 @@ export interface FileRoutesByFullPath {
   '/gigs': typeof AppGigsRouteWithChildren
   '/home': typeof AppHomeRoute
   '/library': typeof AppLibraryRouteWithChildren
+  '/lost-found': typeof AppLostFoundRoute
   '/notes': typeof AppNotesRouteWithChildren
   '/notices': typeof AppNoticesRouteWithChildren
   '/profile': typeof AppProfileRoute
@@ -216,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/feed/admin': typeof AppFeedAdminRoute
   '/gigs/$gigId': typeof AppGigsGigIdRoute
   '/gigs/new': typeof AppGigsNewRoute
+  '/gigs/orders': typeof AppGigsOrdersRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/library/admin': typeof AppLibraryAdminRoute
   '/library/notifications': typeof AppLibraryNotificationsRoute
@@ -239,6 +253,7 @@ export interface FileRoutesByTo {
   '/gigs': typeof AppGigsRouteWithChildren
   '/home': typeof AppHomeRoute
   '/library': typeof AppLibraryRouteWithChildren
+  '/lost-found': typeof AppLostFoundRoute
   '/notes': typeof AppNotesRouteWithChildren
   '/notices': typeof AppNoticesRouteWithChildren
   '/profile': typeof AppProfileRoute
@@ -248,6 +263,7 @@ export interface FileRoutesByTo {
   '/feed/admin': typeof AppFeedAdminRoute
   '/gigs/$gigId': typeof AppGigsGigIdRoute
   '/gigs/new': typeof AppGigsNewRoute
+  '/gigs/orders': typeof AppGigsOrdersRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/library/admin': typeof AppLibraryAdminRoute
   '/library/notifications': typeof AppLibraryNotificationsRoute
@@ -273,6 +289,7 @@ export interface FileRoutesById {
   '/_app/gigs': typeof AppGigsRouteWithChildren
   '/_app/home': typeof AppHomeRoute
   '/_app/library': typeof AppLibraryRouteWithChildren
+  '/_app/lost-found': typeof AppLostFoundRoute
   '/_app/notes': typeof AppNotesRouteWithChildren
   '/_app/notices': typeof AppNoticesRouteWithChildren
   '/_app/profile': typeof AppProfileRoute
@@ -282,6 +299,7 @@ export interface FileRoutesById {
   '/_app/feed/admin': typeof AppFeedAdminRoute
   '/_app/gigs/$gigId': typeof AppGigsGigIdRoute
   '/_app/gigs/new': typeof AppGigsNewRoute
+  '/_app/gigs/orders': typeof AppGigsOrdersRoute
   '/_app/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/_app/library/admin': typeof AppLibraryAdminRoute
   '/_app/library/notifications': typeof AppLibraryNotificationsRoute
@@ -307,6 +325,7 @@ export interface FileRouteTypes {
     | '/gigs'
     | '/home'
     | '/library'
+    | '/lost-found'
     | '/notes'
     | '/notices'
     | '/profile'
@@ -316,6 +335,7 @@ export interface FileRouteTypes {
     | '/feed/admin'
     | '/gigs/$gigId'
     | '/gigs/new'
+    | '/gigs/orders'
     | '/lectures/$lectureId'
     | '/library/admin'
     | '/library/notifications'
@@ -339,6 +359,7 @@ export interface FileRouteTypes {
     | '/gigs'
     | '/home'
     | '/library'
+    | '/lost-found'
     | '/notes'
     | '/notices'
     | '/profile'
@@ -348,6 +369,7 @@ export interface FileRouteTypes {
     | '/feed/admin'
     | '/gigs/$gigId'
     | '/gigs/new'
+    | '/gigs/orders'
     | '/lectures/$lectureId'
     | '/library/admin'
     | '/library/notifications'
@@ -372,6 +394,7 @@ export interface FileRouteTypes {
     | '/_app/gigs'
     | '/_app/home'
     | '/_app/library'
+    | '/_app/lost-found'
     | '/_app/notes'
     | '/_app/notices'
     | '/_app/profile'
@@ -381,6 +404,7 @@ export interface FileRouteTypes {
     | '/_app/feed/admin'
     | '/_app/gigs/$gigId'
     | '/_app/gigs/new'
+    | '/_app/gigs/orders'
     | '/_app/lectures/$lectureId'
     | '/_app/library/admin'
     | '/_app/library/notifications'
@@ -475,6 +499,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppNotesRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/lost-found': {
+      id: '/_app/lost-found'
+      path: '/lost-found'
+      fullPath: '/lost-found'
+      preLoaderRoute: typeof AppLostFoundRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/library': {
       id: '/_app/library'
       path: '/library'
@@ -566,6 +597,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLecturesLectureIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/gigs/orders': {
+      id: '/_app/gigs/orders'
+      path: '/orders'
+      fullPath: '/gigs/orders'
+      preLoaderRoute: typeof AppGigsOrdersRouteImport
+      parentRoute: typeof AppGigsRoute
+    }
     '/_app/gigs/new': {
       id: '/_app/gigs/new'
       path: '/new'
@@ -641,11 +679,13 @@ const AppFeedRouteWithChildren =
 interface AppGigsRouteChildren {
   AppGigsGigIdRoute: typeof AppGigsGigIdRoute
   AppGigsNewRoute: typeof AppGigsNewRoute
+  AppGigsOrdersRoute: typeof AppGigsOrdersRoute
 }
 
 const AppGigsRouteChildren: AppGigsRouteChildren = {
   AppGigsGigIdRoute: AppGigsGigIdRoute,
   AppGigsNewRoute: AppGigsNewRoute,
+  AppGigsOrdersRoute: AppGigsOrdersRoute,
 }
 
 const AppGigsRouteWithChildren =
@@ -715,6 +755,7 @@ interface AppRouteChildren {
   AppGigsRoute: typeof AppGigsRouteWithChildren
   AppHomeRoute: typeof AppHomeRoute
   AppLibraryRoute: typeof AppLibraryRouteWithChildren
+  AppLostFoundRoute: typeof AppLostFoundRoute
   AppNotesRoute: typeof AppNotesRouteWithChildren
   AppNoticesRoute: typeof AppNoticesRouteWithChildren
   AppProfileRoute: typeof AppProfileRoute
@@ -730,6 +771,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppGigsRoute: AppGigsRouteWithChildren,
   AppHomeRoute: AppHomeRoute,
   AppLibraryRoute: AppLibraryRouteWithChildren,
+  AppLostFoundRoute: AppLostFoundRoute,
   AppNotesRoute: AppNotesRouteWithChildren,
   AppNoticesRoute: AppNoticesRouteWithChildren,
   AppProfileRoute: AppProfileRoute,
