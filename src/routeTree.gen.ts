@@ -33,6 +33,7 @@ import { Route as AppLibraryNotificationsRouteImport } from './routes/_app.libra
 import { Route as AppLibraryAdminRouteImport } from './routes/_app.library.admin'
 import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures.$lectureId'
 import { Route as AppGigsNewRouteImport } from './routes/_app.gigs.new'
+import { Route as AppGigsGigIdRouteImport } from './routes/_app.gigs.$gigId'
 import { Route as AppFeedAdminRouteImport } from './routes/_app.feed.admin'
 import { Route as AppFeedPostIdRouteImport } from './routes/_app.feed.$postId'
 import { Route as AppChatRoomIdRouteImport } from './routes/_app.chat.$roomId'
@@ -159,6 +160,11 @@ const AppGigsNewRoute = AppGigsNewRouteImport.update({
   path: '/new',
   getParentRoute: () => AppGigsRoute,
 } as any)
+const AppGigsGigIdRoute = AppGigsGigIdRouteImport.update({
+  id: '/$gigId',
+  path: '/$gigId',
+  getParentRoute: () => AppGigsRoute,
+} as any)
 const AppFeedAdminRoute = AppFeedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -208,6 +214,7 @@ export interface FileRoutesByFullPath {
   '/chat/$roomId': typeof AppChatRoomIdRoute
   '/feed/$postId': typeof AppFeedPostIdRoute
   '/feed/admin': typeof AppFeedAdminRoute
+  '/gigs/$gigId': typeof AppGigsGigIdRoute
   '/gigs/new': typeof AppGigsNewRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/library/admin': typeof AppLibraryAdminRoute
@@ -239,6 +246,7 @@ export interface FileRoutesByTo {
   '/chat/$roomId': typeof AppChatRoomIdRoute
   '/feed/$postId': typeof AppFeedPostIdRoute
   '/feed/admin': typeof AppFeedAdminRoute
+  '/gigs/$gigId': typeof AppGigsGigIdRoute
   '/gigs/new': typeof AppGigsNewRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/library/admin': typeof AppLibraryAdminRoute
@@ -272,6 +280,7 @@ export interface FileRoutesById {
   '/_app/chat/$roomId': typeof AppChatRoomIdRoute
   '/_app/feed/$postId': typeof AppFeedPostIdRoute
   '/_app/feed/admin': typeof AppFeedAdminRoute
+  '/_app/gigs/$gigId': typeof AppGigsGigIdRoute
   '/_app/gigs/new': typeof AppGigsNewRoute
   '/_app/lectures/$lectureId': typeof AppLecturesLectureIdRoute
   '/_app/library/admin': typeof AppLibraryAdminRoute
@@ -305,6 +314,7 @@ export interface FileRouteTypes {
     | '/chat/$roomId'
     | '/feed/$postId'
     | '/feed/admin'
+    | '/gigs/$gigId'
     | '/gigs/new'
     | '/lectures/$lectureId'
     | '/library/admin'
@@ -336,6 +346,7 @@ export interface FileRouteTypes {
     | '/chat/$roomId'
     | '/feed/$postId'
     | '/feed/admin'
+    | '/gigs/$gigId'
     | '/gigs/new'
     | '/lectures/$lectureId'
     | '/library/admin'
@@ -368,6 +379,7 @@ export interface FileRouteTypes {
     | '/_app/chat/$roomId'
     | '/_app/feed/$postId'
     | '/_app/feed/admin'
+    | '/_app/gigs/$gigId'
     | '/_app/gigs/new'
     | '/_app/lectures/$lectureId'
     | '/_app/library/admin'
@@ -561,6 +573,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppGigsNewRouteImport
       parentRoute: typeof AppGigsRoute
     }
+    '/_app/gigs/$gigId': {
+      id: '/_app/gigs/$gigId'
+      path: '/$gigId'
+      fullPath: '/gigs/$gigId'
+      preLoaderRoute: typeof AppGigsGigIdRouteImport
+      parentRoute: typeof AppGigsRoute
+    }
     '/_app/feed/admin': {
       id: '/_app/feed/admin'
       path: '/admin'
@@ -620,10 +639,12 @@ const AppFeedRouteWithChildren =
   AppFeedRoute._addFileChildren(AppFeedRouteChildren)
 
 interface AppGigsRouteChildren {
+  AppGigsGigIdRoute: typeof AppGigsGigIdRoute
   AppGigsNewRoute: typeof AppGigsNewRoute
 }
 
 const AppGigsRouteChildren: AppGigsRouteChildren = {
+  AppGigsGigIdRoute: AppGigsGigIdRoute,
   AppGigsNewRoute: AppGigsNewRoute,
 }
 
