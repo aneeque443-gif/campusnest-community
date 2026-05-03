@@ -69,12 +69,12 @@ function GigsPage() {
           <p className="text-xs text-muted-foreground">Hire fellow students for skills.</p>
         </div>
         <div className="flex gap-2">
-          <Link to="/gigs/orders">
-            <Button size="sm" variant="outline"><Inbox className="mr-1 h-4 w-4" />Orders</Button>
-          </Link>
-          <Link to="/gigs/new">
-            <Button size="sm"><Plus className="mr-1 h-4 w-4" />New</Button>
-          </Link>
+          <Button asChild size="sm" variant="outline">
+            <Link to="/gigs/orders"><Inbox className="mr-1 h-4 w-4" />Orders</Link>
+          </Button>
+          <Button asChild size="sm">
+            <Link to="/gigs/new"><Plus className="mr-1 h-4 w-4" />New</Link>
+          </Button>
         </div>
       </header>
 
