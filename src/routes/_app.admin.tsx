@@ -342,13 +342,14 @@ function BroadcastTab({ adminId }: { adminId: string }) {
   useEffect(() => { load(); }, []);
   async function send() {
     if (!title.trim()) return toast.error("Title required");
-    const { error } = await supabase.from("broadcasts").insert({
+    const payload = {
       author_id: adminId,
       title: title.trim(),
       body: body.trim(),
-      target_year: year === "all" ? null : year,
-      target_branch: branch === "all" ? null : branch,
-    });
+      target_year: year === "all" ? null : (year as "FYIT" | "SYIT" | "TYIT"),
+      target_branch: branch === "all" ? null : (branch as "IT" | "CS" | "EXTC" | "Mechanical"),
+    };
+    const { error } = await supabase.from("broadcasts").insert(payload);
     if (error) return toast.error(error.message);
     toast.success("Broadcast sent");
     setTitle(""); setBody(""); setYear("all"); setBranch("all");
@@ -369,22 +370,19 @@ function BroadcastTab({ adminId }: { adminId: string }) {
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All years</SelectItem>
-              <SelectItem value="1st Year">1st Year</SelectItem>
-              <SelectItem value="2nd Year">2nd Year</SelectItem>
-              <SelectItem value="3rd Year">3rd Year</SelectItem>
-              <SelectItem value="4th Year">4th Year</SelectItem>
+              <SelectItem value="FYIT">FYIT</SelectItem>
+              <SelectItem value="SYIT">SYIT</SelectItem>
+              <SelectItem value="TYIT">TYIT</SelectItem>
             </SelectContent>
           </Select>
           <Select value={branch} onValueChange={setBranch}>
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All branches</SelectItem>
-              <SelectItem value="CSE">CSE</SelectItem>
-              <SelectItem value="ECE">ECE</SelectItem>
-              <SelectItem value="ME">ME</SelectItem>
-              <SelectItem value="CE">CE</SelectItem>
-              <SelectItem value="EE">EE</SelectItem>
               <SelectItem value="IT">IT</SelectItem>
+              <SelectItem value="CS">CS</SelectItem>
+              <SelectItem value="EXTC">EXTC</SelectItem>
+              <SelectItem value="Mechanical">Mechanical</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -423,13 +421,14 @@ function ModerationTab() {
 
   async function resolve(r: typeof reports[number], action: "delete" | "dismiss") {
     if (action === "delete") {
+      const sb = supabase as unknown as { from: (t: string) => { delete: () => { eq: (c: string, v: string) => Promise<{ error: { message: string } | null }> } } };
       const tableMap: Record<string, string> = {
         feed_post: "feed_posts", chat_message: "chat_messages", gig: "gigs",
         lost_found: "lost_found_items", doubt: "doubts", note: "notes",
       };
       const tbl = tableMap[r.content_type];
       if (tbl) {
-        const { error } = await supabase.from(tbl).delete().eq("id", r.content_id);
+        const { error } = await sb.from(tbl).delete().eq("id", r.content_id);
         if (error) return toast.error(error.message);
       }
     }
