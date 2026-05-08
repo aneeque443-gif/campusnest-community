@@ -4,11 +4,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "@tanstack/react-router";
-import { Newspaper, Flame, Star, DoorOpen, Megaphone, BookOpen, Search } from "lucide-react";
+import { Newspaper, Flame, Star, DoorOpen, Megaphone, BookOpen, Search, Shield } from "lucide-react";
 import { QuestsCard } from "@/components/gamification/QuestsCard";
 import { LeaderboardCard } from "@/components/gamification/LeaderboardCard";
 import { Badge } from "@/components/ui/badge";
 import { levelColor } from "@/lib/gamification";
+import { useRoles } from "@/lib/use-role";
 
 export const Route = createFileRoute("/_app/home")({
   head: () => ({ meta: [{ title: "Home — CampusNest" }] }),
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/_app/home")({
 
 function HomePage() {
   const { user } = useAuth();
+  const { isAdmin } = useRoles();
   const [name, setName] = useState("");
   const [stats, setStats] = useState<{ xp: number; level: string; streak: number } | null>(null);
 
@@ -61,6 +63,21 @@ function HomePage() {
 
       <QuestsCard />
       <LeaderboardCard />
+
+      {isAdmin && (
+        <Link to="/admin">
+          <Card className="h-full border-accent/40 shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <Shield className="h-4 w-4 text-accent" /> Admin Panel
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <p className="text-[11px] text-muted-foreground">Manage users, content, broadcasts, and more.</p>
+            </CardContent>
+          </Card>
+        </Link>
+      )}
 
       <div className="grid grid-cols-2 gap-3">
         <Link to="/rooms">
