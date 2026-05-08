@@ -14,6 +14,62 @@ export type Database = {
   }
   public: {
     Tables: {
+      broadcast_reads: {
+        Row: {
+          broadcast_id: string
+          read_at: string
+          user_id: string
+        }
+        Insert: {
+          broadcast_id: string
+          read_at?: string
+          user_id: string
+        }
+        Update: {
+          broadcast_id?: string
+          read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broadcast_reads_broadcast_id_fkey"
+            columns: ["broadcast_id"]
+            isOneToOne: false
+            referencedRelation: "broadcasts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      broadcasts: {
+        Row: {
+          author_id: string
+          body: string
+          created_at: string
+          id: string
+          target_branch: Database["public"]["Enums"]["student_branch"] | null
+          target_year: Database["public"]["Enums"]["student_year"] | null
+          title: string
+        }
+        Insert: {
+          author_id: string
+          body?: string
+          created_at?: string
+          id?: string
+          target_branch?: Database["public"]["Enums"]["student_branch"] | null
+          target_year?: Database["public"]["Enums"]["student_year"] | null
+          title: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          target_branch?: Database["public"]["Enums"]["student_branch"] | null
+          target_year?: Database["public"]["Enums"]["student_year"] | null
+          title?: string
+        }
+        Relationships: []
+      }
       chat_message_reactions: {
         Row: {
           created_at: string
@@ -212,6 +268,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      content_reports: {
+        Row: {
+          content_id: string
+          content_type: string
+          created_at: string
+          id: string
+          reason: string
+          reporter_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+        }
+        Insert: {
+          content_id: string
+          content_type: string
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Update: {
+          content_id?: string
+          content_type?: string
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Relationships: []
       }
       daily_quests: {
         Row: {
@@ -1530,12 +1622,14 @@ export type Database = {
       }
       profiles: {
         Row: {
+          banned_reason: string | null
           bio: string | null
           branch: Database["public"]["Enums"]["student_branch"]
           created_at: string
           enrollment_id: string
           full_name: string
           id: string
+          is_banned: boolean
           last_quest_date: string | null
           level: string
           photo_url: string | null
@@ -1546,12 +1640,14 @@ export type Database = {
           year: Database["public"]["Enums"]["student_year"]
         }
         Insert: {
+          banned_reason?: string | null
           bio?: string | null
           branch: Database["public"]["Enums"]["student_branch"]
           created_at?: string
           enrollment_id: string
           full_name: string
           id: string
+          is_banned?: boolean
           last_quest_date?: string | null
           level?: string
           photo_url?: string | null
@@ -1562,12 +1658,14 @@ export type Database = {
           year: Database["public"]["Enums"]["student_year"]
         }
         Update: {
+          banned_reason?: string | null
           bio?: string | null
           branch?: Database["public"]["Enums"]["student_branch"]
           created_at?: string
           enrollment_id?: string
           full_name?: string
           id?: string
+          is_banned?: boolean
           last_quest_date?: string | null
           level?: string
           photo_url?: string | null

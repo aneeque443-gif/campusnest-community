@@ -25,6 +25,7 @@ import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppGigsRouteImport } from './routes/_app.gigs'
 import { Route as AppFriendsRouteImport } from './routes/_app.friends'
 import { Route as AppFeedRouteImport } from './routes/_app.feed'
+import { Route as AppAdminRouteImport } from './routes/_app.admin'
 import { Route as AppChatIndexRouteImport } from './routes/_app.chat.index'
 import { Route as AppRoomsMineRouteImport } from './routes/_app.rooms.mine'
 import { Route as AppRoomsAdminRouteImport } from './routes/_app.rooms.admin'
@@ -122,6 +123,11 @@ const AppFeedRoute = AppFeedRouteImport.update({
   path: '/feed',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAdminRoute = AppAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppChatIndexRoute = AppChatIndexRouteImport.update({
   id: '/chat/',
   path: '/chat/',
@@ -214,6 +220,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/admin': typeof AppAdminRoute
   '/feed': typeof AppFeedRouteWithChildren
   '/friends': typeof AppFriendsRoute
   '/gigs': typeof AppGigsRouteWithChildren
@@ -248,6 +255,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/admin': typeof AppAdminRoute
   '/feed': typeof AppFeedRouteWithChildren
   '/friends': typeof AppFriendsRoute
   '/gigs': typeof AppGigsRouteWithChildren
@@ -284,6 +292,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/_app/admin': typeof AppAdminRoute
   '/_app/feed': typeof AppFeedRouteWithChildren
   '/_app/friends': typeof AppFriendsRoute
   '/_app/gigs': typeof AppGigsRouteWithChildren
@@ -320,6 +329,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/admin'
     | '/feed'
     | '/friends'
     | '/gigs'
@@ -354,6 +364,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/admin'
     | '/feed'
     | '/friends'
     | '/gigs'
@@ -389,6 +400,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/_app/admin'
     | '/_app/feed'
     | '/_app/friends'
     | '/_app/gigs'
@@ -539,6 +551,13 @@ declare module '@tanstack/react-router' {
       path: '/feed'
       fullPath: '/feed'
       preLoaderRoute: typeof AppFeedRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin': {
+      id: '/_app/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AppAdminRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/chat/': {
@@ -750,6 +769,7 @@ const AppRoomsRouteWithChildren = AppRoomsRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
+  AppAdminRoute: typeof AppAdminRoute
   AppFeedRoute: typeof AppFeedRouteWithChildren
   AppFriendsRoute: typeof AppFriendsRoute
   AppGigsRoute: typeof AppGigsRouteWithChildren
@@ -766,6 +786,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAdminRoute: AppAdminRoute,
   AppFeedRoute: AppFeedRouteWithChildren,
   AppFriendsRoute: AppFriendsRoute,
   AppGigsRoute: AppGigsRouteWithChildren,
@@ -794,12 +815,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
