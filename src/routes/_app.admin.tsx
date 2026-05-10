@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import {
   Shield, Users, Newspaper, GraduationCap, BookOpen, DoorOpen,
-  Megaphone, Flag, BarChart3, Search, Trash2, Pin, Ban, CheckCircle2, XCircle,
+  Megaphone, Flag, BarChart3, Search, Trash2, Pin, Ban, CheckCircle2, XCircle, PlayCircle,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_app/admin")({
@@ -469,6 +469,7 @@ function ManageLinksTab() {
     { to: "/notices/admin", label: "Notices", icon: Pin },
     { to: "/rooms/admin", label: "Study Rooms", icon: DoorOpen },
     { to: "/library/admin", label: "Library books", icon: BookOpen },
+    { to: "/lectures/admin", label: "Lectures", icon: PlayCircle },
     { to: "/feed/admin", label: "Feed (pin posts)", icon: Newspaper },
   ] as const;
   return (

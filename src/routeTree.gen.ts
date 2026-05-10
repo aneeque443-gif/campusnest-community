@@ -34,6 +34,7 @@ import { Route as AppNoticesAdminRouteImport } from './routes/_app.notices.admin
 import { Route as AppNotesNoteIdRouteImport } from './routes/_app.notes.$noteId'
 import { Route as AppLibraryNotificationsRouteImport } from './routes/_app.library.notifications'
 import { Route as AppLibraryAdminRouteImport } from './routes/_app.library.admin'
+import { Route as AppLecturesAdminRouteImport } from './routes/_app.lectures.admin'
 import { Route as AppLecturesLectureIdRouteImport } from './routes/_app.lectures.$lectureId'
 import { Route as AppGigsOrdersRouteImport } from './routes/_app.gigs.orders'
 import { Route as AppGigsNewRouteImport } from './routes/_app.gigs.new'
@@ -169,6 +170,11 @@ const AppLibraryAdminRoute = AppLibraryAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AppLibraryRoute,
 } as any)
+const AppLecturesAdminRoute = AppLecturesAdminRouteImport.update({
+  id: '/lectures/admin',
+  path: '/lectures/admin',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppLecturesLectureIdRoute = AppLecturesLectureIdRouteImport.update({
   id: '/lectures/$lectureId',
   path: '/lectures/$lectureId',
@@ -245,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/gigs/new': typeof AppGigsNewRoute
   '/gigs/orders': typeof AppGigsOrdersRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
+  '/lectures/admin': typeof AppLecturesAdminRoute
   '/library/admin': typeof AppLibraryAdminRoute
   '/library/notifications': typeof AppLibraryNotificationsRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
@@ -281,6 +288,7 @@ export interface FileRoutesByTo {
   '/gigs/new': typeof AppGigsNewRoute
   '/gigs/orders': typeof AppGigsOrdersRoute
   '/lectures/$lectureId': typeof AppLecturesLectureIdRoute
+  '/lectures/admin': typeof AppLecturesAdminRoute
   '/library/admin': typeof AppLibraryAdminRoute
   '/library/notifications': typeof AppLibraryNotificationsRoute
   '/notes/$noteId': typeof AppNotesNoteIdRoute
@@ -319,6 +327,7 @@ export interface FileRoutesById {
   '/_app/gigs/new': typeof AppGigsNewRoute
   '/_app/gigs/orders': typeof AppGigsOrdersRoute
   '/_app/lectures/$lectureId': typeof AppLecturesLectureIdRoute
+  '/_app/lectures/admin': typeof AppLecturesAdminRoute
   '/_app/library/admin': typeof AppLibraryAdminRoute
   '/_app/library/notifications': typeof AppLibraryNotificationsRoute
   '/_app/notes/$noteId': typeof AppNotesNoteIdRoute
@@ -357,6 +366,7 @@ export interface FileRouteTypes {
     | '/gigs/new'
     | '/gigs/orders'
     | '/lectures/$lectureId'
+    | '/lectures/admin'
     | '/library/admin'
     | '/library/notifications'
     | '/notes/$noteId'
@@ -393,6 +403,7 @@ export interface FileRouteTypes {
     | '/gigs/new'
     | '/gigs/orders'
     | '/lectures/$lectureId'
+    | '/lectures/admin'
     | '/library/admin'
     | '/library/notifications'
     | '/notes/$noteId'
@@ -430,6 +441,7 @@ export interface FileRouteTypes {
     | '/_app/gigs/new'
     | '/_app/gigs/orders'
     | '/_app/lectures/$lectureId'
+    | '/_app/lectures/admin'
     | '/_app/library/admin'
     | '/_app/library/notifications'
     | '/_app/notes/$noteId'
@@ -629,6 +641,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLibraryAdminRouteImport
       parentRoute: typeof AppLibraryRoute
     }
+    '/_app/lectures/admin': {
+      id: '/_app/lectures/admin'
+      path: '/lectures/admin'
+      fullPath: '/lectures/admin'
+      preLoaderRoute: typeof AppLecturesAdminRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/lectures/$lectureId': {
       id: '/_app/lectures/$lectureId'
       path: '/lectures/$lectureId'
@@ -802,6 +821,7 @@ interface AppRouteChildren {
   AppRoomsRoute: typeof AppRoomsRouteWithChildren
   AppChatRoomIdRoute: typeof AppChatRoomIdRoute
   AppLecturesLectureIdRoute: typeof AppLecturesLectureIdRoute
+  AppLecturesAdminRoute: typeof AppLecturesAdminRoute
   AppChatIndexRoute: typeof AppChatIndexRoute
 }
 
@@ -819,6 +839,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppRoomsRoute: AppRoomsRouteWithChildren,
   AppChatRoomIdRoute: AppChatRoomIdRoute,
   AppLecturesLectureIdRoute: AppLecturesLectureIdRoute,
+  AppLecturesAdminRoute: AppLecturesAdminRoute,
   AppChatIndexRoute: AppChatIndexRoute,
 }
 
@@ -836,3 +857,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
