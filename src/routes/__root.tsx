@@ -35,10 +35,14 @@ export const Route = createRootRoute({
       { name: "description", content: "CampusNest — your college companion" },
       { name: "author", content: "CampusNest" },
       { property: "og:title", content: "CampusNest" },
-      { property: "og:description", content: "Your college companion" },
+      { property: "og:description", content: "CampusNest — your college companion" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "CampusNest" },
+      { name: "twitter:description", content: "CampusNest — your college companion" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/4486ea71-5403-404e-854c-480a541c7883/id-preview-cf445ab7--0e1e7558-bf38-4b90-8d76-33e3243431de.lovable.app-1778412364657.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/4486ea71-5403-404e-854c-480a541c7883/id-preview-cf445ab7--0e1e7558-bf38-4b90-8d76-33e3243431de.lovable.app-1778412364657.png" },
     ],
     links: [
       {
