@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_setup: {
+        Row: {
+          id: boolean
+          used: boolean
+          used_at: string | null
+          used_by: string | null
+        }
+        Insert: {
+          id?: boolean
+          used?: boolean
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Update: {
+          id?: boolean
+          used?: boolean
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Relationships: []
+      }
       broadcast_reads: {
         Row: {
           broadcast_id: string
@@ -2026,6 +2047,7 @@ export type Database = {
         Args: { _room_id: string; _user_id: string }
         Returns: boolean
       }
+      claim_admin_setup: { Args: { _code: string }; Returns: Json }
       compute_level: { Args: { _xp: number }; Returns: string }
       ensure_daily_quests: { Args: { _user_id: string }; Returns: undefined }
       ensure_my_quests: { Args: never; Returns: undefined }
