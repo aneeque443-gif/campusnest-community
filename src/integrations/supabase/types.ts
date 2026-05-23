@@ -2073,6 +2073,7 @@ export type Database = {
         Returns: undefined
       }
       my_doubt_ids: { Args: never; Returns: string[] }
+      open_direct_message: { Args: { other_id: string }; Returns: string }
       send_library_due_reminders: { Args: never; Returns: undefined }
     }
     Enums: {
