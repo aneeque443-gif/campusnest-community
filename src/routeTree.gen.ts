@@ -27,6 +27,7 @@ import { Route as AppGigsRouteImport } from './routes/_app.gigs'
 import { Route as AppFriendsRouteImport } from './routes/_app.friends'
 import { Route as AppFeedRouteImport } from './routes/_app.feed'
 import { Route as AppAdminRouteImport } from './routes/_app.admin'
+import { Route as AppNotesIndexRouteImport } from './routes/_app.notes.index'
 import { Route as AppChatIndexRouteImport } from './routes/_app.chat.index'
 import { Route as AppRoomsMineRouteImport } from './routes/_app.rooms.mine'
 import { Route as AppRoomsAdminRouteImport } from './routes/_app.rooms.admin'
@@ -134,6 +135,11 @@ const AppAdminRoute = AppAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
   getParentRoute: () => AppRoute,
+} as any)
+const AppNotesIndexRoute = AppNotesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppNotesRoute,
 } as any)
 const AppChatIndexRoute = AppChatIndexRouteImport.update({
   id: '/chat/',
@@ -259,6 +265,7 @@ export interface FileRoutesByFullPath {
   '/rooms/admin': typeof AppRoomsAdminRoute
   '/rooms/mine': typeof AppRoomsMineRoute
   '/chat/': typeof AppChatIndexRoute
+  '/notes/': typeof AppNotesIndexRoute
   '/library/book/$bookId': typeof AppLibraryBookBookIdRoute
   '/library/peer/$listingId': typeof AppLibraryPeerListingIdRoute
   '/library/peer/new': typeof AppLibraryPeerNewRoute
@@ -277,7 +284,6 @@ export interface FileRoutesByTo {
   '/home': typeof AppHomeRoute
   '/library': typeof AppLibraryRouteWithChildren
   '/lost-found': typeof AppLostFoundRoute
-  '/notes': typeof AppNotesRouteWithChildren
   '/notices': typeof AppNoticesRouteWithChildren
   '/profile': typeof AppProfileRoute
   '/rooms': typeof AppRoomsRouteWithChildren
@@ -296,6 +302,7 @@ export interface FileRoutesByTo {
   '/rooms/admin': typeof AppRoomsAdminRoute
   '/rooms/mine': typeof AppRoomsMineRoute
   '/chat': typeof AppChatIndexRoute
+  '/notes': typeof AppNotesIndexRoute
   '/library/book/$bookId': typeof AppLibraryBookBookIdRoute
   '/library/peer/$listingId': typeof AppLibraryPeerListingIdRoute
   '/library/peer/new': typeof AppLibraryPeerNewRoute
@@ -335,6 +342,7 @@ export interface FileRoutesById {
   '/_app/rooms/admin': typeof AppRoomsAdminRoute
   '/_app/rooms/mine': typeof AppRoomsMineRoute
   '/_app/chat/': typeof AppChatIndexRoute
+  '/_app/notes/': typeof AppNotesIndexRoute
   '/_app/library/book/$bookId': typeof AppLibraryBookBookIdRoute
   '/_app/library/peer/$listingId': typeof AppLibraryPeerListingIdRoute
   '/_app/library/peer/new': typeof AppLibraryPeerNewRoute
@@ -374,6 +382,7 @@ export interface FileRouteTypes {
     | '/rooms/admin'
     | '/rooms/mine'
     | '/chat/'
+    | '/notes/'
     | '/library/book/$bookId'
     | '/library/peer/$listingId'
     | '/library/peer/new'
@@ -392,7 +401,6 @@ export interface FileRouteTypes {
     | '/home'
     | '/library'
     | '/lost-found'
-    | '/notes'
     | '/notices'
     | '/profile'
     | '/rooms'
@@ -411,6 +419,7 @@ export interface FileRouteTypes {
     | '/rooms/admin'
     | '/rooms/mine'
     | '/chat'
+    | '/notes'
     | '/library/book/$bookId'
     | '/library/peer/$listingId'
     | '/library/peer/new'
@@ -449,6 +458,7 @@ export interface FileRouteTypes {
     | '/_app/rooms/admin'
     | '/_app/rooms/mine'
     | '/_app/chat/'
+    | '/_app/notes/'
     | '/_app/library/book/$bookId'
     | '/_app/library/peer/$listingId'
     | '/_app/library/peer/new'
@@ -591,6 +601,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin'
       preLoaderRoute: typeof AppAdminRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/_app/notes/': {
+      id: '/_app/notes/'
+      path: '/'
+      fullPath: '/notes/'
+      preLoaderRoute: typeof AppNotesIndexRouteImport
+      parentRoute: typeof AppNotesRoute
     }
     '/_app/chat/': {
       id: '/_app/chat/'
@@ -771,10 +788,12 @@ const AppLibraryRouteWithChildren = AppLibraryRoute._addFileChildren(
 
 interface AppNotesRouteChildren {
   AppNotesNoteIdRoute: typeof AppNotesNoteIdRoute
+  AppNotesIndexRoute: typeof AppNotesIndexRoute
 }
 
 const AppNotesRouteChildren: AppNotesRouteChildren = {
   AppNotesNoteIdRoute: AppNotesNoteIdRoute,
+  AppNotesIndexRoute: AppNotesIndexRoute,
 }
 
 const AppNotesRouteWithChildren = AppNotesRoute._addFileChildren(
