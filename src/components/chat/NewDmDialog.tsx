@@ -63,7 +63,7 @@ export function NewDmDialog({ open, onOpenChange }: { open: boolean; onOpenChang
     }
   }
 
-  function Row({ p }: { p: Profile | NonNullable<ReturnType<typeof Object>> & { id: string; full_name: string; photo_url: string | null; year: string | null; branch: string | null } }) {
+  function Row({ p }: { p: Profile }) {
     return (
       <button
         onClick={() => start(p.id)}
