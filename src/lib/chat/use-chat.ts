@@ -138,33 +138,10 @@ export async function markRoomRead(roomId: string, userId: string) {
 /** Open or create a DM room+thread with another user. Returns room id. */
 export async function openDirectMessage(myId: string, otherId: string): Promise<string> {
   if (myId === otherId) throw new Error("Cannot DM yourself");
-  const [a, b] = [myId, otherId].sort();
-  const { data: existing } = await supabase
-    .from("direct_message_threads")
-    .select("room_id")
-    .eq("user_a", a)
-    .eq("user_b", b)
-    .maybeSingle();
-  if (existing?.room_id) return existing.room_id;
-
-  // Look up other profile for room name
-  const { data: other } = await supabase
-    .from("profiles")
-    .select("full_name")
-    .eq("id", otherId)
-    .maybeSingle();
-  const { data: room, error: roomErr } = await supabase
-    .from("chat_rooms")
-    .insert({ kind: "dm", name: other?.full_name ?? "Direct Message", created_by: myId })
-    .select("id")
-    .single();
-  if (roomErr || !room) throw roomErr ?? new Error("Could not create DM room");
-  await supabase.from("direct_message_threads").insert({ room_id: room.id, user_a: a, user_b: b });
-  await supabase.from("chat_room_members").insert([
-    { room_id: room.id, user_id: a },
-    { room_id: room.id, user_id: b },
-  ]);
-  return room.id;
+  const { data, error } = await supabase.rpc("open_direct_message", { other_id: otherId });
+  if (error) throw error;
+  if (!data) throw new Error("Could not open chat");
+  return data as string;
 }
 
 /** Create a study group with a list of members (excluding creator who is auto-added). */
