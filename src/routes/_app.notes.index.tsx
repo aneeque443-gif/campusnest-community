@@ -56,7 +56,7 @@ type NoteRow = {
   uploader?: { full_name: string; photo_url: string | null } | null;
 };
 
-export const Route = createFileRoute("/_app/notes")({
+export const Route = createFileRoute("/_app/notes/")({
   head: () => ({ meta: [{ title: "NestNotes — CampusNest" }] }),
   component: NotesPage,
 });
