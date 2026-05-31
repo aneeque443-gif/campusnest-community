@@ -11,7 +11,7 @@ import { Plus, Search, Star, Briefcase, Inbox } from "lucide-react";
 import { GIG_CATEGORIES, type Gig } from "@/lib/gigs";
 import { useAuth } from "@/lib/auth-context";
 
-export const Route = createFileRoute("/_app/gigs")({
+export const Route = createFileRoute("/_app/gigs/")({
   head: () => ({ meta: [{ title: "GigNest — CampusNest" }] }),
   component: GigsPage,
 });
