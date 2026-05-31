@@ -111,7 +111,12 @@ export function useUserRooms(userId: string | undefined) {
   useEffect(() => {
     if (!userId) return;
     const id = setInterval(() => refreshRef.current(), 3000);
-    return () => clearInterval(id);
+    const onMarked = () => refreshRef.current();
+    window.addEventListener("chat:room-read", onMarked);
+    return () => {
+      clearInterval(id);
+      window.removeEventListener("chat:room-read", onMarked);
+    };
   }, [userId]);
 
   return { rooms, loading, refresh };
@@ -131,8 +136,12 @@ export async function markRoomRead(roomId: string, userId: string) {
     .update({ last_read_at: new Date().toISOString() }, { count: "exact" })
     .eq("room_id", roomId)
     .eq("user_id", userId);
-  if (!updErr && (count ?? 0) > 0) return;
-  await supabase.from("chat_room_members").insert({ room_id: roomId, user_id: userId });
+  if (updErr || (count ?? 0) === 0) {
+    await supabase.from("chat_room_members").insert({ room_id: roomId, user_id: userId });
+  }
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("chat:room-read", { detail: { roomId } }));
+  }
 }
 
 /** Open or create a DM room+thread with another user. Returns room id. */
