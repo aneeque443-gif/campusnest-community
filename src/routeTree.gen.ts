@@ -27,7 +27,12 @@ import { Route as AppGigsRouteImport } from './routes/_app.gigs'
 import { Route as AppFriendsRouteImport } from './routes/_app.friends'
 import { Route as AppFeedRouteImport } from './routes/_app.feed'
 import { Route as AppAdminRouteImport } from './routes/_app.admin'
+import { Route as AppRoomsIndexRouteImport } from './routes/_app.rooms.index'
+import { Route as AppNoticesIndexRouteImport } from './routes/_app.notices.index'
 import { Route as AppNotesIndexRouteImport } from './routes/_app.notes.index'
+import { Route as AppLibraryIndexRouteImport } from './routes/_app.library.index'
+import { Route as AppGigsIndexRouteImport } from './routes/_app.gigs.index'
+import { Route as AppFeedIndexRouteImport } from './routes/_app.feed.index'
 import { Route as AppChatIndexRouteImport } from './routes/_app.chat.index'
 import { Route as AppRoomsMineRouteImport } from './routes/_app.rooms.mine'
 import { Route as AppRoomsAdminRouteImport } from './routes/_app.rooms.admin'
@@ -136,10 +141,35 @@ const AppAdminRoute = AppAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AppRoute,
 } as any)
+const AppRoomsIndexRoute = AppRoomsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoomsRoute,
+} as any)
+const AppNoticesIndexRoute = AppNoticesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppNoticesRoute,
+} as any)
 const AppNotesIndexRoute = AppNotesIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppNotesRoute,
+} as any)
+const AppLibraryIndexRoute = AppLibraryIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppGigsIndexRoute = AppGigsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppGigsRoute,
+} as any)
+const AppFeedIndexRoute = AppFeedIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppFeedRoute,
 } as any)
 const AppChatIndexRoute = AppChatIndexRouteImport.update({
   id: '/chat/',
@@ -265,7 +295,12 @@ export interface FileRoutesByFullPath {
   '/rooms/admin': typeof AppRoomsAdminRoute
   '/rooms/mine': typeof AppRoomsMineRoute
   '/chat/': typeof AppChatIndexRoute
+  '/feed/': typeof AppFeedIndexRoute
+  '/gigs/': typeof AppGigsIndexRoute
+  '/library/': typeof AppLibraryIndexRoute
   '/notes/': typeof AppNotesIndexRoute
+  '/notices/': typeof AppNoticesIndexRoute
+  '/rooms/': typeof AppRoomsIndexRoute
   '/library/book/$bookId': typeof AppLibraryBookBookIdRoute
   '/library/peer/$listingId': typeof AppLibraryPeerListingIdRoute
   '/library/peer/new': typeof AppLibraryPeerNewRoute
@@ -278,15 +313,10 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/admin': typeof AppAdminRoute
-  '/feed': typeof AppFeedRouteWithChildren
   '/friends': typeof AppFriendsRoute
-  '/gigs': typeof AppGigsRouteWithChildren
   '/home': typeof AppHomeRoute
-  '/library': typeof AppLibraryRouteWithChildren
   '/lost-found': typeof AppLostFoundRoute
-  '/notices': typeof AppNoticesRouteWithChildren
   '/profile': typeof AppProfileRoute
-  '/rooms': typeof AppRoomsRouteWithChildren
   '/chat/$roomId': typeof AppChatRoomIdRoute
   '/feed/$postId': typeof AppFeedPostIdRoute
   '/feed/admin': typeof AppFeedAdminRoute
@@ -302,7 +332,12 @@ export interface FileRoutesByTo {
   '/rooms/admin': typeof AppRoomsAdminRoute
   '/rooms/mine': typeof AppRoomsMineRoute
   '/chat': typeof AppChatIndexRoute
+  '/feed': typeof AppFeedIndexRoute
+  '/gigs': typeof AppGigsIndexRoute
+  '/library': typeof AppLibraryIndexRoute
   '/notes': typeof AppNotesIndexRoute
+  '/notices': typeof AppNoticesIndexRoute
+  '/rooms': typeof AppRoomsIndexRoute
   '/library/book/$bookId': typeof AppLibraryBookBookIdRoute
   '/library/peer/$listingId': typeof AppLibraryPeerListingIdRoute
   '/library/peer/new': typeof AppLibraryPeerNewRoute
@@ -342,7 +377,12 @@ export interface FileRoutesById {
   '/_app/rooms/admin': typeof AppRoomsAdminRoute
   '/_app/rooms/mine': typeof AppRoomsMineRoute
   '/_app/chat/': typeof AppChatIndexRoute
+  '/_app/feed/': typeof AppFeedIndexRoute
+  '/_app/gigs/': typeof AppGigsIndexRoute
+  '/_app/library/': typeof AppLibraryIndexRoute
   '/_app/notes/': typeof AppNotesIndexRoute
+  '/_app/notices/': typeof AppNoticesIndexRoute
+  '/_app/rooms/': typeof AppRoomsIndexRoute
   '/_app/library/book/$bookId': typeof AppLibraryBookBookIdRoute
   '/_app/library/peer/$listingId': typeof AppLibraryPeerListingIdRoute
   '/_app/library/peer/new': typeof AppLibraryPeerNewRoute
@@ -382,7 +422,12 @@ export interface FileRouteTypes {
     | '/rooms/admin'
     | '/rooms/mine'
     | '/chat/'
+    | '/feed/'
+    | '/gigs/'
+    | '/library/'
     | '/notes/'
+    | '/notices/'
+    | '/rooms/'
     | '/library/book/$bookId'
     | '/library/peer/$listingId'
     | '/library/peer/new'
@@ -395,15 +440,10 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/admin'
-    | '/feed'
     | '/friends'
-    | '/gigs'
     | '/home'
-    | '/library'
     | '/lost-found'
-    | '/notices'
     | '/profile'
-    | '/rooms'
     | '/chat/$roomId'
     | '/feed/$postId'
     | '/feed/admin'
@@ -419,7 +459,12 @@ export interface FileRouteTypes {
     | '/rooms/admin'
     | '/rooms/mine'
     | '/chat'
+    | '/feed'
+    | '/gigs'
+    | '/library'
     | '/notes'
+    | '/notices'
+    | '/rooms'
     | '/library/book/$bookId'
     | '/library/peer/$listingId'
     | '/library/peer/new'
@@ -458,7 +503,12 @@ export interface FileRouteTypes {
     | '/_app/rooms/admin'
     | '/_app/rooms/mine'
     | '/_app/chat/'
+    | '/_app/feed/'
+    | '/_app/gigs/'
+    | '/_app/library/'
     | '/_app/notes/'
+    | '/_app/notices/'
+    | '/_app/rooms/'
     | '/_app/library/book/$bookId'
     | '/_app/library/peer/$listingId'
     | '/_app/library/peer/new'
@@ -602,12 +652,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/rooms/': {
+      id: '/_app/rooms/'
+      path: '/'
+      fullPath: '/rooms/'
+      preLoaderRoute: typeof AppRoomsIndexRouteImport
+      parentRoute: typeof AppRoomsRoute
+    }
+    '/_app/notices/': {
+      id: '/_app/notices/'
+      path: '/'
+      fullPath: '/notices/'
+      preLoaderRoute: typeof AppNoticesIndexRouteImport
+      parentRoute: typeof AppNoticesRoute
+    }
     '/_app/notes/': {
       id: '/_app/notes/'
       path: '/'
       fullPath: '/notes/'
       preLoaderRoute: typeof AppNotesIndexRouteImport
       parentRoute: typeof AppNotesRoute
+    }
+    '/_app/library/': {
+      id: '/_app/library/'
+      path: '/'
+      fullPath: '/library/'
+      preLoaderRoute: typeof AppLibraryIndexRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/_app/gigs/': {
+      id: '/_app/gigs/'
+      path: '/'
+      fullPath: '/gigs/'
+      preLoaderRoute: typeof AppGigsIndexRouteImport
+      parentRoute: typeof AppGigsRoute
+    }
+    '/_app/feed/': {
+      id: '/_app/feed/'
+      path: '/'
+      fullPath: '/feed/'
+      preLoaderRoute: typeof AppFeedIndexRouteImport
+      parentRoute: typeof AppFeedRoute
     }
     '/_app/chat/': {
       id: '/_app/chat/'
@@ -741,11 +826,13 @@ declare module '@tanstack/react-router' {
 interface AppFeedRouteChildren {
   AppFeedPostIdRoute: typeof AppFeedPostIdRoute
   AppFeedAdminRoute: typeof AppFeedAdminRoute
+  AppFeedIndexRoute: typeof AppFeedIndexRoute
 }
 
 const AppFeedRouteChildren: AppFeedRouteChildren = {
   AppFeedPostIdRoute: AppFeedPostIdRoute,
   AppFeedAdminRoute: AppFeedAdminRoute,
+  AppFeedIndexRoute: AppFeedIndexRoute,
 }
 
 const AppFeedRouteWithChildren =
@@ -755,12 +842,14 @@ interface AppGigsRouteChildren {
   AppGigsGigIdRoute: typeof AppGigsGigIdRoute
   AppGigsNewRoute: typeof AppGigsNewRoute
   AppGigsOrdersRoute: typeof AppGigsOrdersRoute
+  AppGigsIndexRoute: typeof AppGigsIndexRoute
 }
 
 const AppGigsRouteChildren: AppGigsRouteChildren = {
   AppGigsGigIdRoute: AppGigsGigIdRoute,
   AppGigsNewRoute: AppGigsNewRoute,
   AppGigsOrdersRoute: AppGigsOrdersRoute,
+  AppGigsIndexRoute: AppGigsIndexRoute,
 }
 
 const AppGigsRouteWithChildren =
@@ -769,6 +858,7 @@ const AppGigsRouteWithChildren =
 interface AppLibraryRouteChildren {
   AppLibraryAdminRoute: typeof AppLibraryAdminRoute
   AppLibraryNotificationsRoute: typeof AppLibraryNotificationsRoute
+  AppLibraryIndexRoute: typeof AppLibraryIndexRoute
   AppLibraryBookBookIdRoute: typeof AppLibraryBookBookIdRoute
   AppLibraryPeerListingIdRoute: typeof AppLibraryPeerListingIdRoute
   AppLibraryPeerNewRoute: typeof AppLibraryPeerNewRoute
@@ -777,6 +867,7 @@ interface AppLibraryRouteChildren {
 const AppLibraryRouteChildren: AppLibraryRouteChildren = {
   AppLibraryAdminRoute: AppLibraryAdminRoute,
   AppLibraryNotificationsRoute: AppLibraryNotificationsRoute,
+  AppLibraryIndexRoute: AppLibraryIndexRoute,
   AppLibraryBookBookIdRoute: AppLibraryBookBookIdRoute,
   AppLibraryPeerListingIdRoute: AppLibraryPeerListingIdRoute,
   AppLibraryPeerNewRoute: AppLibraryPeerNewRoute,
@@ -802,10 +893,12 @@ const AppNotesRouteWithChildren = AppNotesRoute._addFileChildren(
 
 interface AppNoticesRouteChildren {
   AppNoticesAdminRoute: typeof AppNoticesAdminRoute
+  AppNoticesIndexRoute: typeof AppNoticesIndexRoute
 }
 
 const AppNoticesRouteChildren: AppNoticesRouteChildren = {
   AppNoticesAdminRoute: AppNoticesAdminRoute,
+  AppNoticesIndexRoute: AppNoticesIndexRoute,
 }
 
 const AppNoticesRouteWithChildren = AppNoticesRoute._addFileChildren(
@@ -815,11 +908,13 @@ const AppNoticesRouteWithChildren = AppNoticesRoute._addFileChildren(
 interface AppRoomsRouteChildren {
   AppRoomsAdminRoute: typeof AppRoomsAdminRoute
   AppRoomsMineRoute: typeof AppRoomsMineRoute
+  AppRoomsIndexRoute: typeof AppRoomsIndexRoute
 }
 
 const AppRoomsRouteChildren: AppRoomsRouteChildren = {
   AppRoomsAdminRoute: AppRoomsAdminRoute,
   AppRoomsMineRoute: AppRoomsMineRoute,
+  AppRoomsIndexRoute: AppRoomsIndexRoute,
 }
 
 const AppRoomsRouteWithChildren = AppRoomsRoute._addFileChildren(
@@ -876,3 +971,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
