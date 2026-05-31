@@ -99,7 +99,12 @@ function RoomView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [room, roomId, activeSub, subrooms.length]);
 
-  // Auto-scroll + mark read
+  // Mark room as read as soon as we enter it (even before messages load).
+  useEffect(() => {
+    if (user) markRoomRead(roomId, user.id);
+  }, [roomId, user]);
+
+  // Auto-scroll + keep last_read_at fresh as new messages arrive.
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
     if (user && messages.length) markRoomRead(roomId, user.id);
