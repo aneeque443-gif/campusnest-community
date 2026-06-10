@@ -34,6 +34,18 @@ export function MessageItem({
   canPin: boolean;
   onReply: () => void;
 }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const isImage = message.attachment_type?.startsWith("image/");
+  const grouped = reactions.reduce<Record<string, { count: number; mine: boolean; id: string }>>((acc, r) => {
+    const cur = acc[r.emoji] ?? { count: 0, mine: false, id: "" };
+    cur.count++;
+    if (r.user_id === currentUserId) {
+      cur.mine = true;
+      cur.id = r.id;
+    }
+    acc[r.emoji] = cur;
+    return acc;
+  }, {});
   const isMine = message.sender_id === currentUserId;
 
   async function toggleReaction(emoji: string) {
