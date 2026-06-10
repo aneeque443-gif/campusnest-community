@@ -227,3 +227,4 @@ export function MessageItem({
       </div>
     </div>
   );
+}
