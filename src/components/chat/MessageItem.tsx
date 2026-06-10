@@ -46,6 +46,7 @@ export function MessageItem({
     acc[r.emoji] = cur;
     return acc;
   }, {});
+  const isMine = message.sender_id === currentUserId;
 
   async function toggleReaction(emoji: string) {
     const existing = reactions.find((r) => r.user_id === currentUserId && r.emoji === emoji);
@@ -63,6 +64,7 @@ export function MessageItem({
     <div
       className={cn(
         "group flex gap-2",
+        !message.is_announcement && isMine && "flex-row-reverse justify-end",
         message.is_announcement && "rounded-md border border-accent/40 bg-accent/10 p-2",
       )}
       onContextMenu={(e) => {
@@ -70,13 +72,32 @@ export function MessageItem({
         setMenuOpen(true);
       }}
     >
-      <Avatar className="h-8 w-8 shrink-0">
-        <AvatarImage src={sender?.photo_url ?? undefined} />
-        <AvatarFallback>{sender?.full_name?.[0] ?? "?"}</AvatarFallback>
-      </Avatar>
-      <div className="min-w-0 flex-1">
-        <div className="flex items-baseline gap-2">
-          <span className="text-sm font-semibold">{sender?.full_name ?? "Unknown"}</span>
+      {!message.is_announcement && (
+        <Avatar className="h-8 w-8 shrink-0">
+          <AvatarImage src={sender?.photo_url ?? undefined} />
+          <AvatarFallback>{sender?.full_name?.[0] ?? "?"}</AvatarFallback>
+        </Avatar>
+      )}
+
+      <div
+        className={cn(
+          "min-w-0 flex flex-col",
+          message.is_announcement ? "flex-1" : "max-w-[80%]",
+          isMine && !message.is_announcement && "items-end",
+        )}
+      >
+        <div
+          className={cn(
+            "flex items-baseline gap-2",
+            isMine && !message.is_announcement && "flex-row-reverse",
+          )}
+        >
+          {!isMine && !message.is_announcement && (
+            <span className="text-sm font-semibold">{sender?.full_name ?? "Unknown"}</span>
+          )}
+          {isMine && !message.is_announcement && (
+            <span className="text-sm font-semibold text-primary">You</span>
+          )}
           {message.is_announcement && (
             <span className="inline-flex items-center gap-1 rounded bg-accent px-1.5 py-0.5 text-[10px] font-bold uppercase text-accent-foreground">
               <Megaphone className="h-3 w-3" /> Announcement
@@ -86,7 +107,7 @@ export function MessageItem({
           <span className="text-[10px] text-muted-foreground">
             {new Date(message.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
           </span>
-          <div className="ml-auto opacity-0 transition-opacity group-hover:opacity-100">
+          <div className={cn("opacity-0 transition-opacity group-hover:opacity-100", !isMine && "ml-auto")}>
             <Popover>
               <PopoverTrigger asChild>
                 <Button size="icon" variant="ghost" className="h-6 w-6">
@@ -133,40 +154,62 @@ export function MessageItem({
         </div>
 
         {replyTarget && (
-          <div className="mb-1 rounded border-l-2 border-accent bg-muted/30 px-2 py-1 text-xs">
+          <div
+            className={cn(
+              "mb-1 rounded border-l-2 border-accent bg-muted/30 px-2 py-1 text-xs",
+              isMine && !message.is_announcement && "self-start",
+            )}
+          >
             <p className="font-medium text-accent">{replyTargetSender?.full_name ?? "Someone"}</p>
             <p className="truncate text-muted-foreground">{replyTarget.content || replyTarget.attachment_name}</p>
           </div>
         )}
 
-        {message.content && (
-          <p className={cn("text-sm break-words", message.is_announcement && "font-semibold")}>{message.content}</p>
-        )}
+        <div
+          className={cn(
+            !message.is_announcement && "rounded-2xl px-3 py-2",
+            !message.is_announcement && (isMine ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"),
+          )}
+        >
+          {message.content && (
+            <p className={cn("text-sm break-words", message.is_announcement && "font-semibold")}>
+              {message.content}
+            </p>
+          )}
 
-        {message.attachment_url && (
-          isImage ? (
-            <a href={message.attachment_url} target="_blank" rel="noreferrer">
-              <img
-                src={message.attachment_url}
-                alt={message.attachment_name ?? "image"}
-                className="mt-1 max-h-64 rounded border"
-              />
-            </a>
-          ) : (
-            <a
-              href={message.attachment_url}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-1 inline-flex items-center gap-2 rounded border bg-muted/50 px-2 py-1 text-xs hover:bg-muted"
-            >
-              <FileText className="h-4 w-4" />
-              <span className="truncate">{message.attachment_name}</span>
-            </a>
-          )
-        )}
+          {message.attachment_url && (
+            isImage ? (
+              <a href={message.attachment_url} target="_blank" rel="noreferrer">
+                <img
+                  src={message.attachment_url}
+                  alt={message.attachment_name ?? "image"}
+                  className={cn(
+                    "mt-1 max-h-64 rounded border",
+                    !message.is_announcement && isMine && "border-primary-foreground/20",
+                  )}
+                />
+              </a>
+            ) : (
+              <a
+                href={message.attachment_url}
+                target="_blank"
+                rel="noreferrer"
+                className={cn(
+                  "mt-1 inline-flex items-center gap-2 rounded border px-2 py-1 text-xs",
+                  !message.is_announcement && isMine
+                    ? "border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20"
+                    : "bg-muted/50 hover:bg-muted",
+                )}
+              >
+                <FileText className="h-4 w-4" />
+                <span className="truncate">{message.attachment_name}</span>
+              </a>
+            )
+          )}
+        </div>
 
         {Object.keys(grouped).length > 0 && (
-          <div className="mt-1 flex flex-wrap gap-1">
+          <div className={cn("mt-1 flex flex-wrap gap-1", isMine && !message.is_announcement && "justify-end")}>
             {Object.entries(grouped).map(([emoji, { count, mine }]) => (
               <button
                 key={emoji}
